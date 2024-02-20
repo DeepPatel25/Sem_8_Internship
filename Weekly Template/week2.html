@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 2</title>
+    <link rel="stylesheet" href="/style/style.css" />
+  </head>
+
+  <body>
+    <section>
+      <h2>Section 1 :- Modification on Final Demo of Web API c#</h2>
+      <p>1. Auto increment Id</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// User id for creating new user's user id.
+        /// &lt;/summary>
+        public static int noOfNextUserId { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// &lt;summary>
+        /// Static constructor to initialize static fields when the class is first accessed.
+        /// &lt;/summary>
+        static BLUser()
+        {
+            // Read user data from the JSON file when the controller is initialized.
+            string jsonContent = File.ReadAllText(filePath);
+            lstUser = JsonConvert.DeserializeObject&lt;List&lt;USR01>>(jsonContent);
+            
+            noOfNextUserId = lstUser.OrderByDescending(e => e.R01F01).FirstOrDefault().R01F01; ;
+        }
+</code>
+      </pre>
+      <p>2. File based data storing</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// File location of userData.json
+        /// &lt;/summary>
+        private readonly static string filePath = "F:\\Deep - 380\\Training\\API\\Part 6 - Web Development\\SchoolManagementAPI\\SchoolManagementAPI" +
+            "\\Data\\userData.json";
+
+        /// &lt;summary>
+        /// List of users for API endpoints.
+        /// &lt;/summary>
+        public static List&lt;USR01> lstUser;
+
+        /// &lt;summary>
+        /// Static constructor to initialize static fields when the class is first accessed.
+        /// &lt;/summary>
+        static BLUser()
+        {
+            // Read user data from the JSON file when the controller is initialized.
+            string jsonContent = File.ReadAllText(filePath);
+            lstUser = JsonConvert.DeserializeObject&lt;List&lt;USR01>>(jsonContent);
+        }
+
+        /// &lt;summary>
+        /// Updates the user data file with the current user list.
+        /// &lt;/summary>
+        public static void UpdateFileData()
+        {
+            // Serialize the user list to JSON and write it to the file.
+            string jsonContent = JsonConvert.SerializeObject(lstUser, Formatting.Indented);
+            File.WriteAllText(filePath, jsonContent);
+        }
+</code>
+      </pre>
+      <p>3. Separate business logic from controller</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Business logic class for managing user-related operations.
+        /// &lt;/summary>
+        public class BLUser
+        {
+            #region Private Fields
+    
+            /// &lt;summary>
+            /// File location of userData.json
+            /// &lt;/summary>
+            private readonly static string filePath = "F:\\Deep - 380\\Training\\API" +
+                "\\Part 6 - Web Development\\SchoolManagementAPI\\SchoolManagementAPI" +
+                "\\Data\\userData.json";
+    
+            /// &lt;summary>
+            /// List of users for API endpoints.
+            /// &lt;/summary>
+            public static List&lt;USR01> lstUser;
+    
+            /// &lt;summary>
+            /// User id for creating new user's user id.
+            /// &lt;/summary>
+            public static int noOfNextUserId { get; set; }
+    
+            #endregion
+    
+            #region Constructor
+    
+            /// &lt;summary>
+            /// Default constructor for BLUser.
+            /// &lt;/summary>
+            public BLUser() { }
+    
+            /// &lt;summary>
+            /// Static constructor to initialize static fields when the class is first accessed.
+            /// &lt;/summary>
+            static BLUser()
+            {
+                // Read user data from the JSON file when the controller is initialized.
+                string jsonContent = File.ReadAllText(filePath);
+                lstUser = JsonConvert.DeserializeObject&lt;List&lt;USR01>>(jsonContent);
+    
+                noOfNextUserId = lstUser.OrderByDescending(e => e.R01F01).FirstOrDefault().R01F01; ;
+            }
+    
+            #endregion
+    
+            #region Public Methods
+    
+            /// &lt;summary>
+            /// Adds a new user to the user list.
+            /// &lt;/summary>
+            /// &lt;param name="objUSR01">User object to be added.&lt;/param>
+            public static void AddUser(USR01 objUSR01)
+            {
+                objUSR01.R01F01 = ++noOfNextUserId;
+                lstUser.Add(objUSR01);
+            }
+    
+            /// &lt;summary>
+            /// Retrieves the list of all users.
+            /// &lt;/summary>
+            /// &lt;returns>List of all users.&lt;/returns>
+            public static List&lt;USR01> GetUserList()
+            {
+                return lstUser;
+            }
+    
+            /// &lt;summary>
+            /// Retrieves a specific user by their ID.
+            /// &lt;/summary>
+            /// &lt;param name="userId">User ID.&lt;/param>
+            /// &lt;returns>User object corresponding to the provided ID.&lt;/returns>
+            public static USR01 GetUser(int userId)
+            {
+                return lstUser.Find(usr => usr.R01F01 == userId);
+            }
+    
+            /// &lt;summary>
+            /// Updates the user data file with the current user list.
+            /// &lt;/summary>
+            public static void UpdateFileData()
+            {
+                // Serialize the user list to JSON and write it to the file.
+                string jsonContent = JsonConvert.SerializeObject(lstUser, Formatting.Indented);
+                File.WriteAllText(filePath, jsonContent);
+            }
+    
+            /// &lt;summary>
+            /// Deletes a user by their ID.
+            /// &lt;/summary>
+            /// &lt;param name="delUserId">ID of the user to be deleted.&lt;/param>
+            /// &lt;returns>Success message upon user deletion.&lt;/returns>
+            public static string DeleteUser(int delUserId)
+            {
+                USR01 objUSR01 = GetUser(delUserId);
+    
+                if (objUSR01 == null)
+                    return "No user found";
+    
+                lstUser.Remove(objUSR01);
+                return "User Deleted Successfully";
+            }
+    
+            /// &lt;summary>
+            /// Updates the data of an existing user.
+            /// &lt;/summary>
+            /// &lt;param name="objUpdateData">New user data.&lt;/param>
+            /// &lt;returns>Success message upon user data update.&lt;/returns>
+            public static string UpdateUserData(USR01 objUpdateData)
+            {
+                USR01 objUSR01 = lstUser.Find(usr => usr.R01F01 == objUpdateData.R01F01);
+    
+                if (objUSR01 == null)
+                    return "No user found";
+    
+                objUSR01.R01F03 = objUpdateData.R01F03;
+                return "User updated Successfully";
+            }
+    
+            #endregion
+        }
+</code>
+      </pre>
+
+      <p>4. Adding summary comments and inline comments on final demo</p>
+
+      <h2>Section 2 :- File Handling in C#</h2>
+      <p>
+        1. System.IO.File Class :- File.Exists(string path) checks if a file
+        exists at the specified path. File.WriteAllText(string path, string
+        contents) writes the specified text content to a file, creating the file
+        if it doesn't exist. File.ReadAllLines(string path) reads all lines from
+        a file into a string array.
+      </p>
+      <p>
+        2. System.IO.Directory Class :- Directory.Exists(string path) checks if
+        a directory exists at the specified path.
+        Directory.CreateDirectory(string path) creates a new directory at the
+        specified path. Directory.GetFiles(string path) returns an array of file
+        names in the specified directory. Directory.GetDirectories(string path)
+        returns an array of directory names in the specified directory.
+      </p>
+      <p>
+        3. System.IO.Path Class :- Path.Combine(string path1, string path2)
+        combines two strings into a path. Path.GetExtension(string path) gets
+        the extension of the specified path. Path.GetFileName(string path) gets
+        the file name and extension from a path.
+      </p>
+      <p>
+        4. File and Directory Operations :- Reading/Writing Bytes use
+        File.ReadAllBytes and File.WriteAllBytes for reading and writing binary
+        data. Copying Files/Directories use File.Copy and Directory.Copy methods
+        can be used for copying files and directories. File.Move and
+        Directory.Move methods are used for moving or renaming files and
+        directories.
+      </p>
+      <p>
+        5. System.IO.Stream Class :- For low-level file I/O operations, you can
+        use streams. FileStream is commonly used for reading and writing bytes
+        to files.
+      </p>
+      <p>
+        6. Handling Exceptions: Always handle exceptions that may occur during
+        file system operations, especially when dealing with user inputs or
+        external files.
+      </p>
+
+      <pre>
+<code>
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        // Example file path
+        string filePath = "example.txt";
+
+        // Check if the file exists
+        if (File.Exists(filePath))
+        {
+            // Read all lines from the file
+            string[] lines = File.ReadAllLines(filePath);
+
+            // Display each line
+            foreach (string line in lines)
+            {
+                Console.WriteLine(line);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"File '{filePath}' does not exist.");
+        }
+
+        // Example directory path
+        string directoryPath = "ExampleDirectory";
+
+        // Check if the directory exists
+        if (!Directory.Exists(directoryPath))
+        {
+            // Create the directory
+            Directory.CreateDirectory(directoryPath);
+            Console.WriteLine($"Directory '{directoryPath}' created.");
+        }
+        else
+        {
+            Console.WriteLine($"Directory '{directoryPath}' already exists.");
+        }
+    }
+}
+</code>
+      </pre>
+
+      <h2>Section 3 :- Debugging in Visual Studio 2022</h2>
+      <p>
+        Debugging in Visual Studio 2022 is a crucial aspect of software
+        development that allows developers to identify and fix issues in their
+        code efficiently. Visual Studio provides a powerful set of tools and
+        features to simplify the debugging process, making it easier to locate
+        and resolve errors in your applications. Here's an introduction to
+        debugging in Visual Studio 2022:
+      </p>
+      <p>
+        1. Setting Breakpoints: A breakpoint is a marker that tells the debugger
+        to pause the execution of your program at a specific line of code. To
+        set a breakpoint, click on the margin to the left of the code editor or
+        press F9 while the cursor is on the desired line.
+      </p>
+      <p>
+        2. Starting the Debugger: You can start the debugger by pressing F5 or
+        selecting "Start Debugging" from the Debug menu. Alternatively, you can
+        use the "Start Without Debugging" option (Ctrl + F5) if you want to run
+        the application without attaching the debugger.
+      </p>
+      <p>
+        3. Stepping Through Code: Once the debugger is active, you can step
+        through your code using the following commands: F10: Step Over -
+        Executes the current line of code and stops at the next line. F11: Step
+        Into - If the current line contains a method, the debugger will enter
+        the method and stop at the first line. Shift + F11: Step Out - Continues
+        execution until the current method is complete and stops at the calling
+        line.
+      </p>
+      <p>
+        4. Inspecting Variables: The Locals and Watch windows allow you to
+        inspect the values of variables and expressions during debugging. You
+        can add variables to the Watch window and observe their values as you
+        step through the code.
+      </p>
+      <p>
+        5. Conditional Breakpoints: You can set breakpoints with conditions, so
+        the debugger will only pause when a specific condition is met.
+        Right-click on a breakpoint and choose "Condition" to set a condition
+        for that breakpoint.
+      </p>
+      <p>
+        6. Debugging Tools: Visual Studio provides additional debugging tools,
+        such as the Immediate Window, Call Stack, and Output Window, to help you
+        understand program flow and diagnose issues.
+      </p>
+      <p>
+        7. Exception Handling: Visual Studio allows you to configure how
+        exceptions are handled during debugging, helping you catch and address
+        errors more effectively.
+      </p>
+      <p>
+        8. Live Debugging: Visual Studio 2022 supports live debugging for .NET
+        applications, enabling you to make code changes while debugging and see
+        the impact without restarting the application.
+      </p>
+      <p>
+        9. Diagnostics Tools: Visual Studio offers various diagnostic tools to
+        analyze application performance, memory usage, and other aspects of your
+        code during debugging.
+      </p>
+      <img src="/images/Week 2/Debugging Windows.jpg" />
+
+      <h2>Section 4 :- Dependency Injection</h2>
+      <p>
+        Dependency Injection is a design pattern in software development that
+        involves providing a component with its dependencies rather than
+        allowing it to create them. It helps in achieving inversion of control,
+        making components more modular, reusable, and testable. DI reduces the
+        coupling between components by allowing external systems (usually a
+        framework or container) to inject dependencies into a class rather than
+        having the class create its dependencies internally.
+      </p>
+
+      <pre>
+<code>
+    // Service Interface
+    public interface IMessageService
+    {
+        void SendMessage(string message);
+    }
+    
+    // Service Implementation
+    public class EmailService : IMessageService
+    {
+        public void SendMessage(string message)
+        {
+            Console.WriteLine($"Sending email: {message}");
+        }
+    }
+    
+    // Client Class with Dependency Injection
+    public class NotificationService
+    {
+        private readonly IMessageService _messageService;
+    
+        // Constructor injection
+        public NotificationService(IMessageService messageService)
+        {
+            _messageService = messageService;
+        }
+    
+        public void SendNotification(string message)
+        {
+            // Use the injected dependency
+            _messageService.SendMessage(message);
+        }
+    }
+    
+    class Program
+    {
+        static void Main()
+        {
+            // Create an instance of the service
+            IMessageService emailService = new EmailService();
+    
+            // Inject the service into the client class
+            NotificationService notificationService = new NotificationService(emailService);
+    
+            // Use the client class with injected dependency
+            notificationService.SendNotification("Hello, Dependency Injection!");
+    
+            // This can easily be swapped with another implementation without changing NotificationService
+            // IMessageService anotherService = new AnotherMessageService();
+            // NotificationService notificationService = new NotificationService(anotherService);
+        }
+    }    
+</code>
+      </pre>
+
+      <h2>Section 5 :- Data Serialization</h2>
+
+      <p>
+        Serialization is the process of converting an object or data structure
+        into a format that can be easily stored or transmitted and later
+        reconstructed. In C#, there are several ways to perform data
+        serialization. Two common methods are using the built-in BinaryFormatter
+        or XML serialization. Here's an overview of both approaches:
+      </p>
+
+      <p>
+        1. Binary Serialization (using BinaryFormatter): Binary serialization is
+        a compact and efficient way to serialize objects into a binary format.
+        The BinaryFormatter class in the
+        System.Runtime.Serialization.Formatters.Binary namespace is commonly
+        used for this purpose.
+      </p>
+
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Binary Serialization Deserialization Demo
+        /// &lt;/summary>
+        public void BinaryConvertDemo()
+        {
+            STU02 objstudent = new STU02();
+            objstudent.U02F01 = 1;
+            objstudent.U02F02 = "Deep";
+
+            // Serialization
+            FileStream fs = new FileStream("F:\\Deep - 380\\Training\\API\\Advanced C# Topics\\C# Advance\\DataSerializationDemo\\DataSerializationDemo\\demo.dat", FileMode.Create);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(fs, objstudent);
+            fs.Close();
+           
+            // Deserialization
+            FileStream fs1 = new FileStream("F:\\Deep - 380\\Training\\API\\Advanced C# Topics\\C# Advance\\DataSerializationDemo\\DataSerializationDemo\\demo.dat", FileMode.Open);
+            STU02 derializeObj = (STU02)formatter.Deserialize(fs1);
+            Console.WriteLine(derializeObj.U02F02);
+
+            fs1.Close();
+        }
+</code>
+    </pre>
+      <p>
+        2. XML Serialization (using XmlSerializer): XML serialization is often
+        used when human-readable data is desirable. The XmlSerializer class in
+        the System.Xml.Serialization namespace is used for XML serialization.
+      </p>
+      <pre> 
+<code>            
+        /// &lt;summary>
+        /// Convert operation on class object
+        /// &lt;/summary>
+        public void XmlConvertDemoOfClass()
+        {
+            XmlDocument objXmlDocument = new XmlDocument();
+            XPathNavigator xNav = objXmlDocument.CreateNavigator();
+            
+            STU01 objStudent = new STU01()
+            {
+                Id = 1,
+                Name = "Deep Patel",
+                Age = 20
+            };
+
+            XmlSerializer x = new XmlSerializer(objStudent.GetType());
+            using(var xs = xNav.AppendChild())
+            {
+                x.Serialize(xs, objStudent);
+            }
+
+            Console.WriteLine(objXmlDocument.OuterXml);
+
+            STU01 objStudent2 = (STU01)x.Deserialize(new StringReader(objXmlDocument.OuterXml));
+            Console.WriteLine(objStudent2.Id);
+            Console.WriteLine(objStudent2.Name);
+            Console.WriteLine(objStudent2.Age);
+        }
+</code>
+        </pre>
+
+      <p>
+        3. Json Serialization (using Newtonsoft.Json) The Newtonsoft.Json
+        library (Json.NET) is a popular third-party library for JSON
+        serialization and deserialization in C#. You can install it using NuGet
+        Package Manager with the following command:
+      </p>
+      <pre>
+<code>     
+        /// &lt;summary>
+        /// Convert operation on class object
+        /// &lt;/summary>
+        public void JsonConvertDemoOfClass()
+        {
+            STU01 objStudent = new STU01()
+            {
+                Id = 1,
+                Name = "Deep Patel",
+                Age = 20
+            };
+
+            // Serializing object to json data
+            string jsonData = JsonConvert.SerializeObject(objStudent);
+            Console.WriteLine(jsonData);
+
+            // Deserialize json data to object
+            STU01 objstudent2 = JsonConvert.DeserializeObject&lt;STU01>(jsonData);
+            Console.WriteLine($"{objstudent2.Id} {objstudent2.Name} {objstudent2.Age}");
+        }
+</code>
+    </pre>
+
+      <h2>Section 6 :- File Upload & Download</h2>
+
+      <p>Upload Demo :-</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// POST :- api/CLStudent/upload
+        /// Upload your data to server
+        /// &lt;/summary>
+        /// &lt;returns>String response&lt;/returns>
+        [HttpPost]
+        [Route("upload")]
+        public async Task&lt;string> UploadFileAsync()
+        {
+            var ctx = HttpContext.Current;
+            var root = ctx.Server.MapPath("~/Upload Data");
+            var provider = new MultipartFormDataStreamProvider(root);
+
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                foreach (var file in provider.FileData)
+                {
+                    var name = file.Headers.ContentDisposition.FileName;
+                    name = name.Trim('"');
+
+                    var localFileName = file.LocalFileName;
+                    var fileP = Path.Combine(root, name);
+
+                    File.Copy(localFileName, fileP, true);
+                }
+
+                return "File written successfully";
+            }
+            catch (Exception ex)
+            {
+                return $"Error :- {ex.Message}";
+            }
+        }
+</code>
+      </pre>
+
+      <p>Download Demo</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Download backup file of student data
+        /// &lt;/summary>
+        /// &lt;returns>&lt;/returns>
+        public HttpResponseMessage DownloadFile()
+        {
+            if (File.Exists(filePath))
+            {
+                var dataBytes = File.ReadAllBytes(filePath);
+                var dataStream = new MemoryStream(dataBytes);
+
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StreamContent(dataStream);
+                response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") 
+                { 
+
+                };
+                response.Content.Headers.ContentDisposition.FileName = "Backup of Student Data " + DateTime.Now.ToString("dd-MM-yyyy") + ".txt"; // Set the desired file name
+                response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+                return response;
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+        }
+</code>
+      </pre>
+    </section>
+  </body>
+</html>
