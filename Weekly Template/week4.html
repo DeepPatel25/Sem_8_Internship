@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 4</title>
+    <link rel="stylesheet" href="/style/style.css" />
+  </head>
+
+  <body>
+    <section>
+      <h2>Section 1 :- Added functionalities in final demo</h2>
+      <p>1. Encrypted Password Storing</p>
+      <p>2. Static method changes</p>
+      <p>3. Excel file download functionality</p>
+
+      <h2>Section 2 :- CORS Demo using Json with Padding</h2>
+      <p>
+        CORS (Cross-Origin Resource Sharing) is a security feature implemented
+        by web browsers that allows or restricts web applications running at one
+        origin (domain) to make requests for resources from a different origin.
+        This is done to prevent potential security vulnerabilities. JSONP (JSON
+        with Padding) is a technique used to overcome the same-origin policy
+        limitations in browsers. It involves making requests for JSON data by
+        dynamically creating script tags in the HTML document. The response is
+        wrapped with a callback function specified by the client to handle the
+        data.
+      </p>
+      <p>To create a CORS demo using JSONP:</p>
+      <p>1. Server-side (API):</p>
+      <p>
+        The server should respond to JSONP requests by wrapping the JSON data
+        with a callback function specified in the request. Include the
+        appropriate CORS headers to allow cross-origin requests.
+      </p>
+      <p>2. Client-side (JavaScript):</p>
+      <p>
+        Create a dynamic script tag with the source pointing to the API
+        endpoint, including a callback parameter with the desired function name.
+        Define the callback function in the client-side script to process the
+        JSON data when the response is received.
+      </p>
+      <p>3. Implementation:</p>
+      <p>
+        Assume the API endpoint is on a different domain. Client-side script
+        dynamically creates a script tag with a source pointing to the API,
+        including a callback function named in the query parameter. The server
+        responds with JSON data wrapped inside the specified callback function.
+        The client-side callback function processes the JSON data.
+      </p>
+
+      <p>Demo :-</p>
+      <p>WebApiConfig.cs file</p>
+      <pre>
+<code>
+    using System.Web.Http;
+    using WebApiContrib.Formatting.Jsonp;
+    
+    namespace JsonPCorsAPI
+    {
+        public static class WebApiConfig
+        {
+            public static void Register(HttpConfiguration config)
+            {
+                // Web API configuration and services
+    
+                // Web API routes
+                config.MapHttpAttributeRoutes();
+    
+                config.Routes.MapHttpRoute(
+                    name: "DefaultApi",
+                    routeTemplate: "api/{controller}/{id}",
+                    defaults: new { id = RouteParameter.Optional }
+                );
+    
+                // webapicontrib.formatting.jsonp
+                var jsonformatter = new JsonpMediaTypeFormatter(config.Formatters.JsonFormatter);
+                config.Formatters.Add(jsonformatter);
+            }
+        }
+    }
+</code>
+      </pre>
+
+      <p>ValueController.cs</p>
+      <pre>
+<code>
+using System.Web.Http;
+
+namespace JsonPCorsAPI.Controllers
+{
+    public class ValueController : ApiController
+    {
+        public IHttpActionResult Get()
+        {
+            return Ok("Hello Deep");
+        }
+
+        /*
+            function fetchJsonp(url, callbackName) {
+              // Create a Promise that will be resolved when the script is loaded
+              return new Promise((resolve, reject) => {
+                // Generate a unique callback function name
+                const callbackFuncName = `jsonpCallback_${Math.round(100000 * Math.random())}`;
+
+                // Attach the callback function to the window object
+                window[callbackFuncName] = function(data) {
+                  // Clean up: remove the script tag and the callback function from the window
+                  document.body.removeChild(script);
+                  delete window[callbackFuncName];
+
+                  // Resolve the Promise with the received data
+                  resolve(data);
+                };
+
+                // Set up the script tag with the JSONP URL
+                const script = document.createElement('script');
+                script.src = `${url}?callback=${callbackFuncName}`;
+
+                // Attach an error event listener to the script
+                script.onerror = function() {
+                  // Clean up: remove the script tag and the callback function from the window
+                  document.body.removeChild(script);
+                  delete window[callbackFuncName];
+
+                  // Reject the Promise with an error
+                  reject(new Error('Error loading script'));
+                };
+
+                // Append the script tag to the document body
+                document.body.appendChild(script);
+              });
+            }
+
+            // Example usage
+            const jsonpUrl = 'https://localhost:44303/api/Value';
+            fetchJsonp(jsonpUrl)
+              .then(data => {
+                console.log('JSONP-like data:', data);
+              })
+              .catch(error => {
+                console.error('Error fetching JSONP-like data:', error);
+              });
+        */
+    }
+}
+</code>
+      </pre>
+
+      <h2>Section 3 :- Cookies in Web API</h2>
+      <p>
+        Cookies in a Web API are small pieces of data sent from a server and
+        stored on the client's browser. They are commonly used to maintain
+        stateful information, track user sessions, and store preferences. In C#
+        Web API, cookies can be accessed and manipulated to exchange data
+        between the client and server. They are often utilized for user
+        authentication, session management, and personalization. Cookies are
+        sent with each HTTP request, allowing servers to recognize and customize
+        responses for specific clients. Proper handling of cookies is crucial
+        for secure and efficient communication between web applications and
+        users.
+      </p>
+
+      <p>CLCookieController.cs</p>
+      <pre>
+<code>
+    using System;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Web.Http;
+    
+    namespace CookieAPI.Controllers
+    {
+        [RoutePrefix("api/CLCookie")]
+        public class CLCookieController : ApiController
+        {
+            [HttpGet]
+            [Route("SetCookie")]
+            public HttpResponseMessage SetCookie()
+            {
+                // Single Cookie Add
+    
+                var response = new HttpResponseMessage();
+                var cookie = new CookieHeaderValue("session-id", "123");
+                cookie.Expires = DateTime.Now.AddDays(1);
+                cookie.Path = "/";
+    
+                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                return response;
+    
+                // Multiple Cookie Add in single 
+                //var response = new HttpResponseMessage();
+                //var value = new NameValueCollection();
+                //value["sid"] = "123";
+                //value["token"] = "Basic";
+                //value["theme"] = "Light";
+    
+                //var cookie = new CookieHeaderValue("session", value);
+                //cookie.Expires = DateTime.Now.AddSeconds(30);
+                //response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                //return response;
+            }
+    
+            [HttpGet]
+            [Route("GetCookie")]
+            public IHttpActionResult GetCookieValue()
+            {
+                CookieHeaderValue cookie = Request.Headers.GetCookies("session").FirstOrDefault();
+    
+                if (cookie != null)
+                {
+                    // return Ok(cookie["session-id"].Value);
+    
+                    CookieState cookieState = cookie["session"];
+                    return Ok(cookieState.Values["Theme"]);
+                }
+    
+                return NotFound();
+            }
+        }
+    }    
+</code>
+      </pre>
+
+      <h2>Section 4 :- Exception Logging in File</h2>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Writes exception information to a text file.
+        /// &lt;/summary>
+        /// &lt;param name="exception">The exception that occurred.&lt;/param>
+        /// &lt;param name="directoryPath">The directory path for storing log files.&lt;/param>
+        public static void LogError(Exception exception)
+        {
+            try
+            {
+                if (!Directory.Exists(_logFolderPath))
+                {
+                    Directory.CreateDirectory(_logFolderPath);
+                }
+
+                string filePath = Path.Combine(_logFolderPath, $"{DateTime.Today:dd-MM-yy}.txt");
+
+                if (!File.Exists(filePath))
+                {
+                    File.Create(filePath).Dispose();
+                }
+
+                string line = Environment.NewLine;
+                string _errorMsg = exception.GetType().Name;
+                string _exType = exception.GetType().ToString();
+
+                using (StreamWriter writer = File.AppendText(filePath))
+                {
+                    // Error message creation
+                    string error = $"Time: {DateTime.Now:HH:mm:ss}{line}" +
+                                   $"Error Message: {_errorMsg}{line}" +
+                                   $"Exception Type: {_exType}{line}" +
+                                   $"Error Stack Trace: {exception.StackTrace}{line}";
+
+                    writer.WriteLine(error);
+                    writer.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception, e.g., print to console or use a dedicated logging framework
+                Console.WriteLine($"An error occurred while logging: {ex}");
+            }
+        }
+</code>
+      </pre>
+
+      <h2>Section 5 :- Study topics</h2>
+      <p>1. Base Library Features</p>
+      <p>2. Data Serialization</p>
+      <p>3. Exception Types</p>
+      <p>4. JObject</p>
+      <p>5. CORS using Json With Padding</p>
+      <p>6. JWT Token using System class and OWin middleware.</p>
+      <p>7. Version Compatibility</p>
+    </section>
+  </body>
+</html>
