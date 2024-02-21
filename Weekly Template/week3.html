@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 3</title>
+    <link rel="stylesheet" href="/style/style.css" />
+</head>
+
+<body>
+    <section>
+        <h2>Section 1 :- Lambda Expression</h2>
+        <p>In C#, a lambda expression is a concise way to create anonymous functions. It allows you to define inline,
+            short, and often one-time-use functions without explicitly declaring a separate method. The syntax for a
+            lambda expression is (parameters) => expression, where parameters are the input parameters and the
+            expression is the operation to be performed.</p>
+
+        <p>Example</p>
+        <pre>
+<code>
+    Func<int, int, int> add = (a, b) => a + b;
+    int result = add(3, 5); // result is 8
+</code>
+        </pre>
+
+        <p>In this example, the lambda expression (a, b) => a + b defines an anonymous function that takes two integers
+            and returns their sum. The Func&lt;int, int, int> delegate is used to store and execute the lambda
+            expression.
+
+            Lambda expressions are commonly used in LINQ queries, event handling, and functional programming
+            paradigms, providing a more concise and expressive way to write code with less boilerplate.</p>
+
+        <h2>Section 2 :- Extension Method</h2>
+        <p>
+            In C#, an extension method allows you to add new methods to existing types without modifying them, enhancing
+            the capabilities of those types. Extension methods are static methods within static classes and are invoked
+            as if they were instance methods of the extended type. The defining class must be in scope through a using
+            directive.</p>
+
+        <pre>
+<code>
+    namespace ExtensionMEthodDemo
+    {
+        static class NewMethodClass
+        {
+            /// &lt;summary>
+            /// Extension method of ExtDemoBaseClass
+            /// &lt;/summary>
+            /// &lt;param name="ext">Binding Parameter for ExtDemoBaseClass&lt;/param>
+            public static void M4(this ExtDemoBaseClass ext)
+            {
+                Console.WriteLine("This is method 4");
+            }
+    
+            /// &lt;summary>
+            /// Extension method of DemoCheck
+            /// &lt;/summary>
+            /// &lt;param name="ext">Binding Parameter for DemoCheck&lt;/param>
+            /// <param name="str">string for written on console</param>
+            public static void M5(this DemoCheck ext, string str)
+            {
+                Console.WriteLine(str);
+            }
+    
+            /// &lt;summary>
+            /// Returns the count of list
+            /// &lt;/summary>
+            /// &lt;param name="lst">List reference&lt;/param>
+            /// &lt;returns>&lt;/returns>
+            public static int M6(this List&lt;int> lst)
+            {
+                return lst.Count;
+            }
+        }
+    }
+    
+</code>
+        </pre>
+
+        <h2>Section 3 :- Linq in DataTable and List</h2>
+        <p>
+            LINQ (Language Integrated Query) in C# can be used with both DataTable and List. With DataTable, LINQ
+            enables querying and manipulating tabular data, treating rows as objects. In the case of List, LINQ provides
+            a powerful syntax to query and transform collections of objects. Both scenarios leverage LINQ operators like
+            Where, Select, and OrderBy to filter, project, and sort data, offering a concise and expressive way to work
+            with data in memory. Whether working with tabular data in a DataTable or a collection of objects in a List,
+            LINQ facilitates efficient and readable data manipulation operations.
+        </p>
+
+        <p>Example of Linq in DataTable</p>
+        <pre>
+<code>
+    using System.Data;
+
+    namespace LinqDataTableDemo
+    {
+        public class Program
+        {
+            static void Main(string[] args)
+            {
+                EMP01 tblEmployee = new EMP01();
+    
+                // Data Adding
+                tblEmployee.Rows.Add(1, "Deep Patel", 21, "Development", 50000);
+                tblEmployee.Rows.Add(2, "Jeet Patel", 22, "Sales", 25000);
+                tblEmployee.Rows.Add(3, "Vishal Gohil", 25, "Development", 35000);
+                tblEmployee.Rows.Add(4, "Prajval Gahine", 19, "Design", 40000);
+                
+                // Find employee whose department is Development adn sort them according to salary in descending order.
+                var query = from employee in tblEmployee.AsEnumerable()
+                            where employee.Field&lt;string>("P01F04") == "Development"
+                            orderby employee.Field&lt;int>("P01F05") descending
+                            select new
+                            {
+                                Id = employee.Field&lt;int>("P01F01"),
+                                Name = employee.Field&lt;string>("P01F02"),
+                                Age = employee.Field&lt;int>("P01F03"),
+                                Department = employee.Field&lt;string>("P01F04"),
+                                Salary = employee.Field&lt;int>("P01F05")
+                            };
+    
+                var query2 = tblEmployee.AsEnumerable()
+                    .Where(row => row.Field&lt;string>("P01F04").Equals("Development"))
+                    .OrderByDescending(row => row.Field&lt;int>("P01F05"))
+                    .Select(row => new
+                    {
+                        Id = row.Field&lt;int>("P01F01"),
+                        Name = row.Field&lt;string>("P01F02"),
+                        Age = row.Field&lt;int>("P01F03"),
+                        Department = row.Field&lt;string>("P01F04"),
+                        Salary = row.Field&lt;int>("P01F05")
+                    }).ToList();
+    
+                // Find maximum age
+                var query3 = tblEmployee.AsEnumerable().Max(row => row.Field&lt;int>("P01F03"));
+    
+                // Return maximum age data
+                var query4 = tblEmployee.AsEnumerable()
+                    .Where(row => row.Field&lt;int>("P01F03") == query3)
+                    .Select(row => new
+                    {
+                        Id = row.Field&lt;int>("P01F01"),
+                        Name = row.Field&lt;string>("P01F02"),
+                        Age = row.Field&lt;int>("P01F03"),
+                        Department = row.Field&lt;string>("P01F04"),
+                        Salary = row.Field&lt;int>("P01F05")
+                    }).ToList();
+    
+                // Average salary of employee
+                var query5 = tblEmployee.AsEnumerable().Average(row => row.Field&lt;int>("P01F05"));
+    
+                Console.WriteLine(query5);
+                foreach (var item in query4)
+                {
+                    Console.WriteLine($"Id :- {item.Id}, Name :- {item.Name}, Salary :- {item.Salary}");
+                }
+            }
+        }
+    }
+</code>
+        </pre>
+
+        <p>Example of Linq in List</p>
+        <pre>
+<code>
+namespace LinqListDemo
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Creating a list of numbers
+            List&lt;int> lstNumbers = new List&lt;int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+            // Filter the lstNumbers and return all even numbers.
+            List&lt;int> lstEvenNumbers = lstNumbers.Where(num => num % 2 == 0).ToList();
+
+            // Ordering Operators
+            // Sorting the numbers on lstEvenNumbers
+            lstEvenNumbers = lstEvenNumbers.OrderBy(num => num).ToList();
+
+            // Grouping the numbers which is modulo of 4
+            var groups = lstNumbers.GroupBy(num => num % 4);
+
+            // Key value
+            foreach(var item in groups)
+            {
+                Console.WriteLine("Key is :- " + item.Key + " ");
+                
+                foreach (var number in item)
+                    Console.Write(number + " ");
+
+                Console.WriteLine();
+            }
+
+            // Creating a new list with prepend a 1 number to the lstNumbers.
+            var lstTemp = lstNumbers.Prepend(1);
+
+            // Checking 1 exists or not in list.
+            Console.WriteLine(lstTemp.Contains(1));
+
+            // Sum
+            Console.WriteLine("sum of list is :- " + lstNumbers.Sum());
+
+            // Partitioning Operators
+            foreach(var number in lstTemp.Take(1))
+            {
+                Console.WriteLine(number + " ");
+            }
+
+            // Element Operators
+            Console.WriteLine("First Element :- " + lstEvenNumbers.First());
+            Console.WriteLine("Last Element :- " + lstEvenNumbers.Last());
+            // Console.WriteLine("Single Element :- " + lstEvenNumbers.SingleOrDefault());
+            Console.WriteLine("Element at 4th position :- " + lstEvenNumbers.ElementAt(4));
+        }
+    }
+}
+</code>
+        </pre>
+
+        <h2>Section 4 :- ORM (Object Relational Mapping) Tool</h2>
+        <p>An ORM (Object-Relational Mapping) tool in C# is a framework that simplifies the interaction between a
+            relational database and an object-oriented application by mapping database tables to objects and vice versa.
+            It abstracts the underlying SQL database operations, allowing developers to work with objects in their code,
+            rather than directly dealing with SQL queries.
+        </p>
+        <p>
+            ORM tools, such as Entity Framework and NHibernate in C#, provide a higher-level, more intuitive way to
+            perform database operations. They offer features like automatic generation of SQL queries, change tracking,
+            and caching, making it easier to develop, maintain, and scale applications. Developers can define the
+            database schema using code-first or database-first approaches, and the ORM tool handles the translation
+            between the object-oriented model and the relational database schema.
+        </p>
+        <p>
+            ORM tools also help reduce repetitive boilerplate code, enhance code readability, and improve productivity
+            by allowing developers to focus on the application's logic rather than low-level database interactions.
+            Overall, ORM tools play a crucial role in bridging the gap between the object-oriented world of application
+            code and the relational world of databases in C# development.</p>
+
+        <p>global.asax.cs File</p>
+        <pre>
+<code>
+    using ServiceStack.OrmLite;
+    using System.Configuration;
+    using System.Web.Http;
+    
+    namespace ORMToolDemo
+    {
+        public class WebApiApplication : System.Web.HttpApplication
+        {
+            protected void Application_Start()
+            {
+                // Database connection using connection string and orm lite tool.
+                var connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+                var dbFactory = new OrmLiteConnectionFactory(connectionString, MySqlDialect.Provider);
+    
+                // Storing OrmLiteConnectionFactory instance for further usage in any other component.
+                Application["DbFactory"] = dbFactory;
+    
+                GlobalConfiguration.Configure(WebApiConfig.Register);
+            }
+        }
+    }    
+</code>
+        </pre>
+
+        <p>CLCustomerController.cs</p>
+        <pre>
+<code>
+    using ORMToolDemo.Models;
+    using ServiceStack.Data;
+    using ServiceStack.OrmLite;
+    using System;
+    using System.Web;
+    using System.Web.Http;
+    
+    namespace ORMToolDemo.Controllers
+    {
+        [RoutePrefix("api/CLCustomer")]
+        public class CLCustomerController : ApiController
+        {
+            private readonly IDbConnectionFactory _dbFactory;
+    
+            public CLCustomerController()
+            {
+                _dbFactory = HttpContext.Current.Application["DbFactory"] as IDbConnectionFactory;
+    
+                if (_dbFactory == null)
+                {
+                    throw new ApplicationException("IDbConnectionFactory not found in Application state.");
+                }
+            }
+    
+            [HttpGet]
+            [Route("GetCustomers")]
+            public IHttpActionResult GetCustomers()
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    var customers = db.Select&lt;Customer>();
+                    return Ok(customers);
+                }
+            }
+    
+            [HttpGet]
+            [Route("GetCustomer/{id}")]
+            public IHttpActionResult GetCustomerById(int id)
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    var customer = db.SingleById&lt;Customer>(id);
+                    return Ok(customer);
+                }
+            }
+    
+            [HttpPost]
+            [Route("Add")]
+            public IHttpActionResult AddData(Customer objCustomer)
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    db.Insert(objCustomer);
+                    return Ok("Added Successfully");
+                }
+            }
+    
+            [HttpDelete]
+            [Route("Delete/{id}")]
+            public IHttpActionResult DeleteData(int id)
+            {
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    db.DeleteById&lt;Customer>(id);
+                    return Ok("Delete");
+                }
+            }
+    
+            [HttpPut]
+            [Route("Update/{id}")]
+            public IHttpActionResult PutCustomer(int id, Customer objUpdatedCustomer)
+            {
+                if (objUpdatedCustomer == null)
+                {
+                    return BadRequest("Invalid customer data.");
+                }
+    
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    var objExistingCustomer = db.SingleById&lt;Customer>(id);
+    
+                    if (objExistingCustomer == null)
+                        return NotFound();
+    
+                    objExistingCustomer.FirstName = objUpdatedCustomer.FirstName;
+                    objExistingCustomer.LastName = objUpdatedCustomer.LastName;
+    
+                    db.Update(objExistingCustomer);
+    
+                    return Ok("Customer updated successfully");
+                }
+            }
+        }
+    }
+</code>
+        </pre>
+
+        <h2>Section 5 :- Security & Cryptography</h2>
+        <p>Security, in the context of computing and information systems, refers to the protection of data, systems, and
+            networks from unauthorized access, attacks, damage, or any form of disruption. It encompasses various
+            measures and practices designed to ensure the confidentiality, integrity, and availability of information.
+        </p>
+        <p>
+            Key aspects of security include:
+        </p>
+        <p>
+            1.Confidentiality: Ensuring that information is accessible only to authorized individuals or systems.
+        </p>
+        <p>
+            2. Integrity: Maintaining the accuracy and reliability of data by preventing unauthorized modifications.
+        </p>
+        <p>
+            3. Availability: Ensuring that systems and data are accessible and usable when needed.
+        </p>
+        <p>
+            4. Authentication: Verifying the identity of users or systems to grant appropriate access privileges.
+        </p>
+        <p>
+            5. Authorization: Granting or restricting access based on verified identities and defined permissions.
+        </p>
+        <p>
+            6. Auditability: Keeping track of system activities to detect and respond to security incidents.
+        </p>
+        <p>
+            Security measures involve a combination of hardware, software, policies, and procedures to create a robust
+            defense against potential threats.
+        </p>
+        <br>
+        <p>
+            Cryptography:
+            Cryptography is a field of study and practice that involves secure communication through the use of
+            mathematical techniques and algorithms to encode and decode information. It plays a crucial role in
+            achieving confidentiality and integrity in data transmission and storage.
+        </p>
+        <p>
+            Key concepts in cryptography include:
+        </p>
+        <p>
+            1. Encryption: The process of converting plaintext into ciphertext using an algorithm and a cryptographic
+            key.
+        </p>
+        <p>
+            2. Decryption: The reverse process of converting ciphertext back to plaintext using the appropriate key.
+        </p>
+        <p>
+            3. Symmetric Cryptography: Uses a single key for both encryption and decryption.
+        </p>
+        <p>
+            4. Asymmetric Cryptography (Public-Key Cryptography): Utilizes a pair of public and private keys for
+            encryption and decryption.
+        </p>
+        <p>
+            5. Hashing: A one-way function that generates a fixed-size string of characters (hash value) from input
+            data, commonly used for data integrity verification.
+        </p>
+        <p>
+            6. Digital Signatures: Verifiable digital equivalents of handwritten signatures, providing authentication
+            and ensuring the integrity of digital messages.
+        </p>
+        <p>
+            Cryptography is an essential component of many security protocols and systems, ensuring the protection of
+            sensitive information in various applications, including online communication, e-commerce, and secure data
+            storage.</p>
+
+        <p>Security algorithms example in c#</p>
+        <pre>
+<code>
+    namespace AESCryptographyDemo
+    {
+        public class Program
+        {
+            internal void AESDemo()
+            {
+                // Create an instance of the class
+                Aes objAes = Aes.Create();
+    
+                // set the key size and the mode
+                objAes.KeySize = 256;
+                objAes.Mode = CipherMode.CBC;
+    
+                // Generate a random key and initialization vector
+                objAes.GenerateKey();
+                objAes.GenerateIV();
+    
+                // Input text
+                string plainText = "Hello Deep.";
+                byte[] cipherText;
+    
+                // AES Encryption
+                using (ICryptoTransform encryptor = objAes.CreateEncryptor())
+                {
+                    byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+                    cipherText = encryptor.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length);
+                }
+    
+                string decryptedText;
+    
+                // AES Decyrption
+                using (ICryptoTransform decryptor = objAes.CreateDecryptor())
+                {
+                    byte[] decryptedByte = decryptor.TransformFinalBlock(cipherText, 0, cipherText.Length);
+                    decryptedText = Encoding.UTF8.GetString(decryptedByte);
+                }
+    
+                // Output :- 
+                Console.WriteLine($"Plain text :- {plainText}");
+                Console.WriteLine($"Cipher text :- {Convert.ToBase64String(cipherText)}");
+                Console.WriteLine($"Decrypted text :- {decryptedText}");
+            }
+    
+            internal void DESDemo()
+            {
+                // Creating a des instance od DES Class
+                DES objDes = DES.Create();
+    
+                // Generating a key and initialization vector for DES
+                objDes.GenerateIV();
+                objDes.GenerateKey();
+    
+                // Input string
+                string plainText = "Hello Deep.";
+                byte[] cipherText;
+    
+                // DES Encryption
+                using (ICryptoTransform encryptor = objDes.CreateEncryptor())
+                {
+                    byte[] plaintextBytes = Encoding.UTF8.GetBytes(plainText);
+                    cipherText = encryptor.TransformFinalBlock(plaintextBytes, 0, plaintextBytes.Length);
+                }
+    
+                string decryptedText;
+    
+                // DES Decyrption
+                using (ICryptoTransform decryptor = objDes.CreateDecryptor())
+                {
+                    byte[] decryptedByte = decryptor.TransformFinalBlock(cipherText, 0, cipherText.Length);
+                    decryptedText = Encoding.UTF8.GetString(decryptedByte);
+                }
+    
+                // Output :- 
+                Console.WriteLine($"Plain text :- {plainText}");
+                Console.WriteLine($"Cipher text :- {Convert.ToBase64String(cipherText)}");
+                Console.WriteLine($"Decrypted text :- {decryptedText}");
+            }
+    
+            internal void RSADemo()
+            {
+                UnicodeEncoding ByteConverter = new UnicodeEncoding();
+                RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+    
+                byte[] plainText, cipherText;
+                plainText = ByteConverter.GetBytes("Hello Deep.");
+    
+                // RSA Encryption
+                cipherText = RSAEncryption(plainText, RSA.ExportParameters(false), false);
+                Console.WriteLine("Cipher text :- " + ByteConverter.GetString(cipherText));
+    
+                // RSA Decryption
+                byte[] decryptedText = RSADecryption(cipherText, RSA.ExportParameters(true), false);
+                Console.WriteLine("Decrypted text :- " + ByteConverter.GetString(decryptedText));
+            }
+    
+            private static byte[]? RSAEncryption(byte[] plainText, RSAParameters rSAParameters, bool v)
+            {
+                try
+                {
+                    byte[] encryptedData;
+                    using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                    {
+                        RSA.ImportParameters(rSAParameters);
+                        encryptedData = RSA.Encrypt(plainText, false);
+    
+                        return encryptedData;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+            }
+    
+            private static byte[]? RSADecryption(byte[] Ciphertext, RSAParameters rSAParameters, bool v)
+            {
+                try
+                {
+                    byte[] decryptedData;
+                    using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                    {
+                        RSA.ImportParameters(rSAParameters);
+                        decryptedData = RSA.Decrypt(Ciphertext, v);
+    
+                        return decryptedData;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+            }
+    
+            static void Main(string[] args)
+            {
+                Program objProgram = new Program();
+    
+                objProgram.AESDemo();
+                objProgram.DESDemo();
+                objProgram.RSADemo();
+            }
+        }
+    }
+    
+</code>
+        </pre>
+
+        <h2>Section 6 :- Final Demo Adding Modules</h2>
+        <p>1. Admin Controller</p>
+        <p>2. User Table</p>
+        <p>3. Record Controller</p>
+        <p>4. Authentication</p>
+        <p>5. Created a OrderDetailViewModel</p>
+
+        <br>
+        <p>Modification <a
+                href="https://github.com/RKITSoftware/Deep-Patel/commit/7cef7911ef2695d7b315a8dac982441f45b5a25f">Link</a>
+        </p>
+    </section>
+</body>
+
+</html>
