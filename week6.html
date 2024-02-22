@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 6</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <section>
+      <h2>
+        Section 1 :- Custom JWT Token using System Class and Microsoft's Class
+      </h2>
+      <p>
+        A custom JWT (JSON Web Token) implementation utilizing both the System
+        class and Microsoft's libraries can enhance security and tailor
+        authentication mechanisms to specific requirements. Leveraging the
+        System namespace, developers can manage core functionalities such as
+        cryptographic operations and token generation. Meanwhile, Microsoft's
+        libraries, like System.IdentityModel.Tokens.Jwt, provide comprehensive
+        support for JWT handling, including validation and parsing.
+      </p>
+      <p>
+        To create a custom JWT token, developers can start by defining the
+        token's payload, which typically includes user information and metadata.
+        Utilizing the JwtSecurityToken class from Microsoft's library, they can
+        then construct the token by specifying the payload, signing key, and
+        cryptographic algorithms. Employing SecurityTokenHandler classes
+        facilitates token serialization and deserialization, ensuring
+        compatibility across systems.
+      </p>
+      <p>
+        Furthermore, integrating additional security measures like token
+        expiration and audience restrictions can be achieved through the
+        TokenValidationParameters class, enhancing the token's resilience
+        against unauthorized access and misuse. By combining functionalities
+        from both the System namespace and Microsoft's libraries, developers can
+        craft robust and tailored JWT solutions suited to diverse authentication
+        scenarios, bolstering application security and user trust.
+      </p>
+
+      <p>JWT Token Demo</p>
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Part%206%20-%20Web%20Development/CustomJWTBearerTokenAPI/CustomJWTBearerTokenAPI/Business%20Logic/BLToken.cs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p>BLToken.cs</p>
+      </a>
+
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Part%206%20-%20Web%20Development/CustomJWTBearerTokenAPI/CustomJWTBearerTokenAPI/Security/TokenAuthenticationAttribute.cs"
+        target="_blank"
+        rel="noopener noreferrer"
+        ><p>TokenAuthenticationAttribute.cs</p></a
+      >
+
+      <h2>Section 2 :- Adding new functionalities & updation in Final Demo</h2>
+      <p>1. Interface</p>
+
+      <a
+        target="_blank"
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Advanced%20C%23%20Topics/C%23%20Advance/OnlineShoppingAPI/OnlineShoppingAPI/Interface/IBasicAPIService.cs"
+      >
+        <p>IBasicAPIService.cs</p>
+      </a>
+
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Advanced%20C%23%20Topics/C%23%20Advance/OnlineShoppingAPI/OnlineShoppingAPI/Business%20Logic/BLCustomer.cs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p>CLCustomerController.cs</p>
+      </a>
+
+      <p>2. Exception Logging</p>
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Advanced%20C%23%20Topics/C%23%20Advance/OnlineShoppingAPI/OnlineShoppingAPI/Business%20Logic/BLHelper.cs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p>BLHelper.cs</p>
+      </a>
+
+      <p>
+        3. Optimizing Methods and Adding Inline Comments and Summary Comments
+        for better understanding of what code how works.
+      </p>
+
+      <p>4. Cart Module</p>
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Advanced%20C%23%20Topics/C%23%20Advance/OnlineShoppingAPI/OnlineShoppingAPI/Business%20Logic/BLCart.cs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p>BLCart.cs</p>
+      </a>
+
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Advanced%20C%23%20Topics/C%23%20Advance/OnlineShoppingAPI/OnlineShoppingAPI/Controllers/CLCartController.cs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <p>CLCartController.cs</p>
+      </a>
+
+      <p>5. Email based 2-step Verification</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Generates an OTP (One-Time Password) and sends it to the customer's registered email.
+        /// &lt;/summary>
+        /// &lt;param name="customerId">The unique identifier of the customer.&lt;/param>
+        /// &lt;returns>
+        /// HttpResponseMessage indicating the success or failure of generating and sending the OTP.
+        /// &lt;/returns>
+        public HttpResponseMessage Generate(int customerId)
+        {
+            try
+            {
+                // Check if the customerId is valid (greater than zero).
+                if (customerId <= 0)
+                {
+                    return BLHelper.ResponseMessage(HttpStatusCode.PreconditionFailed,
+                        "Customer Id can't be null or negative.");
+                }
+
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    // Generate a random OTP.
+                    Random random = new Random();
+                    string otp = random.Next(0, 999999).ToString("000000");
+
+                    // Retrieve the customer's email address from the database.
+                    string email = db.SingleById&lt;CUS01>(customerId)?.S01F03;
+
+                    // If the customer's email is not found, return NotFound response.
+                    if (string.IsNullOrEmpty(email))
+                    {
+                        return BLHelper.ResponseMessage(HttpStatusCode.NotFound,
+                            "Customer email not found.");
+                    }
+
+                    // Send the OTP to the customer's registered email.
+                    SendEmail(email, otp);
+
+                    // Cache the OTP with the customer's email as the key for future validation.
+                    BLHelper.ServerCache.Add(
+                        key: email,
+                        value: otp,
+                        dependencies: null,
+                        absoluteExpiration: DateTime.Now.AddMinutes(5),
+                        slidingExpiration: TimeSpan.Zero,
+                        priority: CacheItemPriority.Default,
+                        onRemoveCallback: null);
+                }
+
+                // Return a success response.
+                return BLHelper.ResponseMessage(HttpStatusCode.OK,
+                    "OTP sent to your registered email.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return an appropriate response
+                BLHelper.LogError(ex);
+                return BLHelper.ResponseMessage(HttpStatusCode.InternalServerError,
+                    "An error occurred while generating OTP.");
+            }
+        }
+</code>
+      </pre>
+
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Verifies the provided OTP (One-Time Password) and initiates the purchase of items 
+        /// in the customer's cart.
+        /// </summary>
+        /// &lt;param name="customerId">The unique identifier of the customer.&lt;/param>
+        /// &lt;param name="otp">The OTP entered by the customer for verification.&lt;/param>
+        /// &lt;returns>
+        /// HttpResponseMessage indicating the success or failure of OTP verification and the 
+        /// subsequent purchase process.
+        /// &lt;/returns>
+        public HttpResponseMessage VerifyAndBuy(int customerId, string otp)
+        {
+            try
+            {
+                // Check if the provided customerId is invalid (negative or zero).
+                if (customerId <= 0)
+                {
+                    return BLHelper.ResponseMessage(HttpStatusCode.PreconditionFailed,
+                        "Id can't be negative nor zero.");
+                }
+
+                using (var db = _dbFactory.OpenDbConnection())
+                {
+                    // Retrieve the customer's email address from the database.
+                    string email = db.SingleById&lt;CUS01>(customerId)?.S01F03;
+
+                    // Retrieve the existing OTP from the cache based on the customer's email.
+                    string existingOTP = BLHelper.ServerCache.Get(email)?.ToString();
+
+                    // If no OTP is generated for buying items, return NotFound response.
+                    if (existingOTP == null)
+                    {
+                        return BLHelper.ResponseMessage(HttpStatusCode.NotFound,
+                            "OTP isn't generated for buying items.");
+                    }
+
+                    // Check if the provided OTP matches the existing OTP for verification.
+                    if (!existingOTP.Equals(otp))
+                    {
+                        return BLHelper.ResponseMessage(HttpStatusCode.BadRequest, "Incorrect OTP.");
+                    }
+
+                    // Call the BuyAllItems method to initiate the purchase process.
+                    BuyAllItems(customerId);
+
+                    // Remove the OTP from the cache after successful verification.
+                    BLHelper.ServerCache.Remove(email);
+
+                    // Return a success response.
+                    return BLHelper.ResponseMessage(HttpStatusCode.OK,
+                        "Items bought successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return an appropriate response
+                BLHelper.LogError(ex);
+                return BLHelper.ResponseMessage(HttpStatusCode.InternalServerError,
+                    "An error occurred while verifying OTP for buying.");
+            }
+        }
+</code>
+      </pre>
+
+      <p>6. Cookie based authentication</p>
+      <pre>
+<code>
+    using OnlineShoppingAPI.Business_Logic;
+    using OnlineShoppingAPI.Models;
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Security.Claims;
+    using System.Security.Principal;
+    using System.Text;
+    using System.Threading;
+    using System.Web;
+    using System.Web.Http.Controllers;
+    using System.Web.Http.Filters;
+    
+    namespace OnlineShoppingAPI.Security
+    {
+        public class CookieBasedAuthAttribute : AuthorizationFilterAttribute
+        {
+            public override void OnAuthorization(HttpActionContext actionContext)
+            {
+                try
+                {
+                    // Getting Cookie Value
+                    CookieHeaderValue cookie = actionContext.Request.Headers
+                        .GetCookies("MyAuth").FirstOrDefault();
+    
+                    if (cookie == null)
+                    {
+                        actionContext.Response = BLHelper.ResponseMessage(
+                            HttpStatusCode.Unauthorized, "Please login");
+                        return;
+                    }
+    
+                    string authToken = cookie["MyAuth"]?.Value;
+    
+                    // Decode the base64-encoded credentials to get the username and password.
+                    string decodedAuthToken = Encoding.UTF8.GetString(
+                        Convert.FromBase64String(authToken));
+                    string[] usernamePassword = decodedAuthToken.Split(':');
+    
+                    string username = usernamePassword[0];
+                    string password = usernamePassword[1];
+    
+                    // Validate user credentials using the BLUser class.
+                    if (BLHelper.IsExist(username, password))
+                    {
+                        USR01 userDetail = BLHelper.GetUser(username);
+                        GenericIdentity identity = new GenericIdentity(username);
+    
+                        identity.AddClaim(new Claim(ClaimTypes.Name, userDetail.R01F02));
+                        identity.AddClaim(new Claim(ClaimTypes.Email,
+                            userDetail.R01F02 + "@gmail.com"));
+    
+                        IPrincipal principal = new GenericPrincipal(identity,
+                            userDetail.R01F04.Split(','));
+    
+                        Thread.CurrentPrincipal = principal;
+    
+                        if (HttpContext.Current != null)
+                        {
+                            HttpContext.Current.User = principal;
+                        }
+                        else
+                        {
+                            actionContext.Response = BLHelper.ResponseMessage(
+                                HttpStatusCode.Unauthorized, "Authorization Denied");
+                        }
+                    }
+                    else
+                    {
+                        // If invalid, return Unauthorized response.
+                        actionContext.Response = BLHelper.ResponseMessage(
+                            HttpStatusCode.Unauthorized, "Invalid Credentials");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle unexpected errors and return Internal Server Error response.
+                    BLHelper.LogError(ex);
+                    actionContext.Response = BLHelper.ResponseMessage(
+                        HttpStatusCode.InternalServerError,
+                            "Internal Server Error - Please Try After Some Time");
+                }
+            }
+        }
+    }
+</code>
+      </pre>
+
+      <p>7. Sending Order Attachment File to User</p>
+      <pre>
+<code>
+        /// &lt;summary>
+        /// Asynchronously sends an email to a customer with an attached Excel file containing order details.
+        /// &lt;/summary>
+        /// &lt;param name="customerEmail">The email address of the customer.&lt;/param>
+        /// &lt;param name="lstPurchasedItem">The list of purchased items to include in the Excel file.&lt;/param>
+        /// &lt;returns>A Task representing the asynchronous operation.&lt;/returns>
+        private async Task SendMailToUserAsync(string customerEmail, dynamic lstPurchasedItem)
+        {
+            // Generate an HTTP response with an attached Excel file
+            HttpResponseMessage response = HttpExcelResponse(lstPurchasedItem);
+        
+            // Read the content from HttpResponseMessage
+            byte[] excelData = await response.Content.ReadAsByteArrayAsync();
+        
+            // Create a MemoryStream from the Excel data
+            using (MemoryStream excelStream = new MemoryStream(excelData))
+            {
+                // Create a MailMessage
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("deeppatel2513@outlook.com");
+                mail.To.Add(customerEmail);
+                mail.Subject = "Order Receipt";
+                //mail.Body = "Body of the Email";
+                mail.IsBodyHtml = true;
+        
+                // Attach the Excel file to the MailMessage
+                Attachment attachment = new Attachment(excelStream,
+                    $"Receipt {DateTime.Now:dd-MM-yyyy}.xlsx",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                mail.Attachments.Add(attachment);
+        
+                // Send the email using SMTP
+                SmtpClient smtpClient = new SmtpClient("smtp.office365.com");
+                smtpClient.Port = 587;
+                smtpClient.Credentials = HttpContext.Current.Application["Credentials"]
+                    as NetworkCredential;
+                smtpClient.EnableSsl = true;
+        
+                try
+                {
+                    smtpClient.Send(mail);
+                    Console.WriteLine("Email sent successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error sending email: " + ex.Message);
+                }
+                finally
+                {
+                    // Dispose of resources
+                    mail.Dispose();
+                     excelStream.Dispose();
+                }
+           }
+        }
+</code>
+        </pre>
+      <p>9. Online Shopping Model Testing</p>
+    </section>
+  </body>
+</html>
