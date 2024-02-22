@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 5</title>
+    <link rel="stylesheet" href="/style/style.css" />
+  </head>
+
+  <body>
+    <section>
+      <h2>Section 1 :- Folder Structure of MVC</h2>
+      <p>
+        In the Model-View-Controller (MVC) architectural pattern, the folder
+        structure typically comprises three main components:
+      </p>
+      <p>
+        1. Models: This folder contains classes and logic representing the
+        application's data and business rules.
+      </p>
+      <p>
+        2. Views: Here, the folder stores the user interface components, such as
+        HTML, CSS, or other presentation-related files.
+      </p>
+      <p>
+        3. Controllers: This folder houses classes responsible for handling user
+        input, processing requests, and interacting with the model to update
+        data or trigger changes in the view.
+      </p>
+      <p>
+        4. Helpers/Utilities: Some MVC frameworks include a folder for helper
+        classes or utilities that assist in various tasks across the
+        application.
+      </p>
+      <p>
+        5. Config: This folder may contain configuration files for routing,
+        database connections, or other settings relevant to the MVC framework.
+      </p>
+      <p>
+        6. Public/Static: Files in this folder are publicly accessible and may
+        include assets like images, stylesheets, and client-side scripts.
+      </p>
+      <p>
+        7. Tests: If unit or integration tests are part of the project, a
+        dedicated folder for test files and suites may be included.
+      </p>
+      <p>
+        8. Vendor/Libraries: In some cases, there might be a folder for
+        third-party libraries or external dependencies.
+      </p>
+      <p>
+        9. Logs: A directory for storing application logs, aiding in debugging
+        and monitoring.
+      </p>
+      <p>
+        10. Localization: If the application supports multiple languages, a
+        folder for localization files or resources may be present.
+      </p>
+
+      <h2>
+        Section 2 :- Difference between asp.net and asp.net core and asp.net
+        framework vs core and intro to core
+      </h2>
+      <p>
+        ASP.NET is a web development framework by Microsoft. ASP.NET Framework
+        is a traditional framework with a Windows-centric approach, while
+        ASP.NET Core is a cross-platform, open-source framework. ASP.NET Core is
+        modular, lightweight, and designed for modern cloud-based,
+        microservices, and containerized applications. It supports
+        cross-platform development, allowing deployment on Windows, Linux, and
+        macOS. ASP.NET Core offers better performance, modularity, and
+        flexibility compared to the monolithic ASP.NET Framework. Core
+        emphasizes dependency injection and is more suitable for modern web
+        development practices. It has a unified MVC framework for both web and
+        API development. With ASP.NET Core, developers can leverage the latest
+        .NET features and target a broader range of platforms.
+      </p>
+
+      <h2>Section 3 :- Middleware using Use and Run</h2>
+      <p>
+        In C# web development, middleware is a component that sits between the
+        application's request and response pipeline, allowing you to perform
+        actions on the request or response. The Use and Run methods are used to
+        configure middleware in the ASP.NET Core framework.
+      </p>
+      <p>
+        1. Use Method: It adds middleware to the request pipeline. It's
+        versatile and allows you to specify custom logic for processing
+        requests.
+      </p>
+
+      <pre>
+<code>
+    app.Use(async (context, next) =>
+    {
+        // Perform logic before passing to the next middleware
+        await next.Invoke();
+        // Perform logic after the next middleware has executed
+    });
+    
+</code>
+      </pre>
+
+      <p>
+        2. Run Method: It's a simpler alternative to Use when you don't need the
+        next middleware. It's typically used for terminating the pipeline.
+      </p>
+
+      <pre>
+<code>
+    app.Run(context =>
+    {
+        // Logic to be executed for the request
+        return context.Response.WriteAsync("Hello, Middleware!");
+    });
+</code>
+      </pre>
+
+      <p>
+        These methods help in composing a chain of middleware components, each
+        handling a specific aspect of the request/response lifecycle in an
+        ASP.NET Core application. The Use method allows for more complex
+        middleware configurations, while the Run method is useful for
+        terminating the pipeline with a specific action.
+      </p>
+
+      <h2>Section 4 :- Software Designing Principles</h2>
+      <p>1. SOLID Principles:</p>
+      <pre>
+    1. Single Responsibility Principle (SRP): A class should have only one reason to change, meaning it should have only one responsibility or job.
+    2. Open/Closed Principle (OCP): Software entities (classes, modules, functions, etc.) should be open for extension but closed formodification. 
+       This encourages the use of interfaces and abstract classes for flexible design.
+    3. Liskov Substitution Principle (LSP): Objects of a superclass should be replaceable with objects of a subclass without affecting the 
+       correctness of the program. This is often achieved through inheritance and polymorphism.
+    4. Interface Segregation Principle (ISP): A class should not be forced to implement interfaces it does not use. This promotes the creation of
+       small, specific interfaces rather than large, general ones.
+    5. Dependency Inversion Principle (DIP): High-level modules should not depend on low-level modules. Both should depend on abstractions.
+       Abstractions should not depend on details; details should depend on abstractions. This promotes the use of dependency injection and
+       inversion of control.
+        </pre
+      >
+
+      <p>
+        2. DRY (Don't Repeat Yourself): Avoid duplicating code by creating
+        reusable components. This reduces maintenance effort and the likelihood
+        of introducing bugs when changes are made.
+      </p>
+      <p>
+        3. KISS (Keep It Simple, Stupid): Keep the design simple and
+        straightforward. Complex solutions can be harder to understand,
+        maintain, and debug.
+      </p>
+      <p>
+        4. YAGNI (You Ain't Gonna Need It): Only implement functionality that is
+        needed at the moment, not what might be needed in the future. This
+        prevents unnecessary complexity and can make the codebase more agile.
+      </p>
+      <p>
+        5. Composition over Inheritance: Favor composition (building complex
+        objects by combining simpler ones) over inheritance (creating new
+        classes by inheriting from existing ones). This promotes flexibility and
+        avoids the issues associated with deep class hierarchies.
+      </p>
+
+      <h2>Section 5 :- View Layout & View Start in Core</h2>
+      <p>
+        In C# with Razor views, "View Layout" refers to the shared structure or
+        template that defines the overall structure of a web page. It typically
+        includes the HTML structure, common styles, and scripts. This layout is
+        used to wrap around individual views, providing a consistent look and
+        feel.
+      </p>
+      <p>
+        On the other hand, "View Start" is a special file named
+        _ViewStart.cshtml that allows you to specify common directives and
+        layout for multiple views in a folder. It helps in centralizing
+        configurations for views, like setting the layout or adding common
+        namespaces.
+      </p>
+      <p>
+        In summary, View Layout defines the overall structure of a web page,
+        while View Start is a file to centralize common configurations for views
+        in a specific folder, enhancing code organization and maintainability in
+        Razor views.
+      </p>
+
+      <h2>Section 6 :- Cache Dependency</h2>
+      <p>
+        In the context of the Cache class in C#, cache dependency refers to the
+        relationship between cached data and the conditions that determine its
+        validity. By specifying dependencies, such as other cached items or
+        external factors, you ensure that the cached data is automatically
+        invalidated and updated when these dependencies change. This helps
+        maintain data coherence and freshness in the cache, enhancing the
+        overall performance and accuracy of the application. The Cache class in
+        C# provides mechanisms, like cache keys and expiration policies, to
+        manage these dependencies efficiently.
+      </p>
+
+      <h2>Section 7 :- Created Demos</h2>
+      <p>1. Interval Class which work as setInterval Method in javascript.</p>
+      <p>2. Cookie based authentication in final demo</p>
+      <p>3. Caching using cache class</p>
+      <p>4. Custom JWT Token</p>
+      <p>5. Session Id Manager Class</p>
+    </section>
+  </body>
+</html>
