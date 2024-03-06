@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 8</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <section>
+      <h1>Section 1 :- Product Model Version 1 to Version 2</h1>
+      <p>
+        In the latest iteration of the product version model, we have introduced
+        several crucial enhancements to provide users with more comprehensive
+        information. Previously, the model only included the price, serving as a
+        reference point for customers. However, recognizing the evolving
+        dynamics of business practices, we have incorporated additional data
+        fields to reflect the varying acquisition and selling prices from
+        suppliers.
+      </p>
+      <p>
+        Furthermore, the inclusion of creation time stamps allows users to track
+        when a product was initially added, facilitating better inventory
+        management and historical analysis. To enhance user experience, a
+        category field has been introduced, streamlining the search process by
+        enabling users to quickly identify products within their desired
+        categories.
+      </p>
+      <p>
+        Lastly, a product status variable has been implemented in version 2,
+        offering a swift and efficient means of checking the availability of a
+        product. These enhancements collectively contribute to a more robust and
+        user-friendly product version, aligning with the evolving needs of
+        businesses in the modern marketplace.
+      </p>
+
+      <p><strong>Product version 1</strong></p>
+      <img src="productV1.jpg" alt="Product Version 1 Data" />
+      <pre>
+<code>
+    using ServiceStack.DataAnnotations;
+
+    namespace OnlineShoppingAPI.Models
+    {
+        [Alias("PRO01")]
+        public class PRO01
+        {
+            /// &lt;summary>
+            /// Product Id
+            /// &lt;/summary>
+            [AutoIncrement]
+            [PrimaryKey]
+            public int O01F01 { get; set; }
+
+            /// &lt;summary>
+            /// Product Name
+            /// &lt;/summary>
+            [Required]
+            [StringLength(100)]
+            public string O01F02 { get; set; }
+
+            /// &lt;summary>
+            /// Product Price
+            /// &lt;/summary>
+            [Required]
+            [DecimalLength(10, 2)]
+            public int O01F03 { get; set; }
+
+            /// &lt;summary>
+            /// Product Quantity
+            /// &lt;/summary>
+            public decimal O01F04 { get; set; }
+
+            /// &lt;summary>
+            /// Product Image
+            /// &lt;/summary>
+            public string O01F05 { get; set; }
+
+            /// &lt;summary>
+            /// Foreign Key of Suplier Table
+            /// &lt;/summary>
+            [References(typeof(SUP01))]
+            public int O01F06 { get; set; }
+        }
+    }
+</code>
+        </pre>
+
+      <p><strong>Product version 2</strong></p>
+      <img src="productV2.jpg" alt="Product Version 2 Data" />
+      <pre>
+<code>
+    using ServiceStack.DataAnnotations;
+    using System;
+    
+    namespace OnlineShoppingAPI.Models
+    {
+        [Alias("PRO02")]
+        public class PRO02
+        {
+            /// &lt;summary>
+            /// Product Id
+            /// &lt;/summary>
+            [AutoIncrement]
+            [PrimaryKey]
+            public int O02F01 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Name
+            /// &lt;/summary>
+            [Required]
+            [StringLength(100)]
+            public string O02F02 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Buy Price
+            /// &lt;/summary>
+            [Required]
+            [DecimalLength(10, 2)]
+            public int O02F03 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Sell Price
+            /// &lt;/summary>
+            [Required]
+            [DecimalLength(10, 2)]
+            public int O02F04 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Quantity
+            /// &lt;/summary>
+            [Required]
+            public decimal O02F05 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Image
+            /// &lt;/summary>
+            public string O02F06 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Status
+            /// &lt;/summary>
+            [Required]
+            public int O02F07 { get; set; }
+    
+            /// &lt;summary>
+            /// Product Creation Time
+            /// &lt;/summary>
+            [Required]
+            public DateTime O02F08 { get; set; }
+    
+            /// &lt;summary>
+            /// Foreign Key of Category Table
+            /// &lt;/summary>
+            [Required]
+            [References(typeof(CAT01))]
+            public int O02F09 { get; set; }
+    
+            /// &lt;summary>
+            /// Foreign Key of Suplier Table
+            /// &lt;/summary>
+            [Required]
+            [References(typeof(SUP01))]
+            public int O02F10 { get; set; }
+        }
+    }
+</code>
+      </pre>
+
+      <h2>Section 2 :- Cookies (Flipkart, Instagram, FactoHR, etc.)</h2>
+      <p>
+        In my research on cookies, I delved into the advantages and
+        disadvantages associated with their usage. To validate real-life
+        scenarios, I conducted tests on the cookies employed by prominent
+        platforms such as Flipkart, Instagram, and Facto HR. Through these
+        examinations, I discovered that when users are logged in, a session ID
+        cookie is generated, serving as a crucial element for creating and
+        maintaining user sessions on platforms like Instagram and Flipkart.
+      </p>
+      <p>
+        My investigation specifically highlighted Flipkart's reliance on an "at"
+        cookie to store user credentials, while Instagram utilizes a "sessionid"
+        cookie for a similar purpose. However, I noted a potential security
+        concern with this approach, as copying and pasting these cookie values
+        onto different browsers or devices grants unauthorized access to the
+        associated user account. This indicates a potential vulnerability in the
+        security framework and suggests the need for a more robust method to
+        safeguard user credentials.
+      </p>
+
+      <h2>Section 3 :- Asp.net Core Web App MVC</h2>
+      <p>
+        ASP.NET Core Web App MVC is a modern web development framework that
+        follows the Model-View-Controller architectural pattern. It allows
+        developers to build dynamic and scalable web applications. In this
+        framework, the Model represents the data and business logic, the View
+        handles the user interface, and the Controller manages the communication
+        between the Model and the View.
+      </p>
+      <p>
+        ASP.NET Core is cross-platform and open-source, providing flexibility
+        for developers to build applications on Windows, Linux, and macOS. It
+        features a lightweight and modular architecture, enabling efficient
+        development and deployment. The framework supports dependency injection,
+        making it easier to manage and test components. It also includes
+        built-in support for HTML, CSS, and JavaScript, simplifying the creation
+        of responsive and interactive user interfaces.
+      </p>
+      <p>
+        ASP.NET Core Web App MVC facilitates the development of RESTful APIs,
+        enabling seamless integration with various client applications. Its use
+        of Razor syntax simplifies the creation of dynamic views, while tag
+        helpers enhance HTML readability. The framework ensures security through
+        features like authentication and authorization, and it supports various
+        data storage options, including Entity Framework Core for database
+        interactions. ASP.NET Core also emphasizes performance, with features
+        like asynchronous programming and the ability to deploy applications as
+        self-contained executables. Its integrated support for testing and
+        logging contributes to robust application development. Overall, ASP.NET
+        Core Web App MVC provides a versatile, modular, and high-performance
+        framework for building modern web applications across different
+        platforms.
+      </p>
+
+      <h2>Section 4 - Entity Framework With Mysql</h2>
+      <p>
+        Entity Framework is a popular object-relational mapping (ORM) framework
+        in the .NET ecosystem, facilitating seamless interaction between
+        applications and databases. When integrated with MySQL, Entity Framework
+        streamlines database operations by allowing developers to work with C#
+        or VB.NET code, abstracting the underlying database structure.
+      </p>
+      <p>
+        It supports various database operations, including querying, updating,
+        and inserting data, with the flexibility to switch between database
+        providers. The MySQL Connector/NET enables connectivity between Entity
+        Framework and MySQL databases, providing a standardized and efficient
+        approach to data access. With Entity Framework, developers can focus on
+        application logic without dealing extensively with database intricacies,
+        enhancing productivity and maintainability in MySQL-backed .NET
+        applications.
+      </p>
+
+      <p><strong>Program.cs</strong></p>
+      <pre>
+<code>
+    using Microsoft.EntityFrameworkCore;
+    using MySQLConnectUsingEntityFramework.Data;
+
+    namespace MySQLConnectUsingEntityFramework
+    {
+        public class Program
+        {
+            public static void Main(string[] args)
+            {
+                var builder = WebApplication.CreateBuilder(args);
+                var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
+
+                // Add services to the container.
+                builder.Services.AddControllersWithViews();
+                builder.Services.AddDbContext&lt;AppDbContext>(options =>
+                {
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                });
+
+                var app = builder.Build();
+
+                // Configure the HTTP request pipeline.
+                if (!app.Environment.IsDevelopment())
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseHsts();
+                }
+
+                app.UseHttpsRedirection();
+                app.UseStaticFiles();
+
+                app.UseRouting();
+
+                app.UseAuthorization();
+
+                app.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                app.Run();
+            }
+        }
+    }
+</code>
+      </pre>
+
+      <p><strong>AppDbContext.cs</strong></p>
+      <pre>
+<code>
+    using Microsoft.EntityFrameworkCore;
+    using MySQLConnectUsingEntityFramework.Models;
+
+    namespace MySQLConnectUsingEntityFramework.Data
+    {
+        public class AppDbContext : DbContext
+        {
+            public AppDbContext(DbContextOptions options) : base(options) { }
+
+            public DbSet&lt;Product> Products { get; set; }
+            public DbSet&lt;UserData> UserData { get; set; }
+        }
+    }
+</code>
+      </pre>
+
+      <p><strong>ProductController.cs</strong></p>
+      <pre>
+<code>
+    using Microsoft.AspNetCore.Mvc;
+    using MySQLConnectUsingEntityFramework.Data;
+    using MySQLConnectUsingEntityFramework.Models;
+
+    namespace MySQLConnectUsingEntityFramework.Controllers
+    {
+        public class ProductController : Controller
+        {
+            private readonly AppDbContext _context;
+
+            public ProductController(AppDbContext context)
+            {
+                _context = context;
+            }
+
+            public IActionResult Index()
+            {
+
+                return View();
+            }
+
+            [HttpPost]
+            public IActionResult Index(UserData userData)
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(new UserData()
+                    {
+                        Username = userData.Username,
+                        Email = userData.Email,
+                        Password = userData.Password
+                    });
+                    _context.SaveChanges();
+
+                    return Ok("User Added successfully.");
+                }
+
+                return View();
+            }
+
+            [HttpGet]
+            public IActionResult User()
+            {
+                var user = _context.UserData.FirstOrDefault(u => u.Id == 1);
+                return View(user);
+            }
+        }
+    }
+</code>
+      </pre>
+
+      <h2>Section 5 :- Identity Framework in Asp.net Core</h2>
+      <p>
+        The Identity Framework in ASP.NET Core is a comprehensive authentication
+        and authorization system designed to simplify user management in web
+        applications. It provides a set of libraries, services, and APIs that
+        facilitate the integration of secure user authentication, role-based
+        authorization, and account management features.
+      </p>
+      <p>
+        Developers can seamlessly implement features such as user registration,
+        password recovery, and two-factor authentication using the Identity
+        Framework. It supports various storage providers, allowing flexible
+        storage of user information, including databases and external identity
+        providers. With customizable and extensible components, developers can
+        adapt the Identity Framework to suit application-specific requirements
+        while ensuring adherence to best security practices.
+      </p>
+      <p>
+        Overall, ASP.NET Core's Identity Framework empowers developers to
+        implement robust and secure user authentication and authorization
+        mechanisms with ease.
+      </p>
+
+      <p><strong>Table created using identify framework</strong></p>
+      <img src="identity Tables.jpg" alt="Tables" />
+
+      <p><strong>ApplicationDbcontext.cs</strong></p>
+      <pre>
+<code>
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+    
+    namespace IdentityDemo.Data
+    {
+        public class ApplicationDbContext : IdentityDbContext&lt;IdentityUser>
+        {
+            public ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext> options) : base(options) { }
+        }
+    }
+</code>
+      </pre>
+
+      <p><strong>AccountController.cs</strong></p>
+      <pre>
+<code>
+    using IdentityDemo.Interfaces;
+    using IdentityDemo.Models;
+    using IdentityDemo.ViewModel;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+
+    namespace IdentityDemo.Controllers
+    {
+        public class AccountController : Controller
+        {
+            private readonly UserManager&lt;IdentityUser> _userManager;
+            private readonly SignInManager&lt;IdentityUser> _signInManager;
+            private readonly RoleManager&lt;IdentityRole> _roleManager;
+            private readonly ISendEmail _sendEmail;
+
+            public AccountController(UserManager&lt;IdentityUser> userManager, SignInManager&lt;IdentityUser> signInManager,
+                RoleManager&lt;IdentityRole> roleManager, ISendEmail sendEmail)
+            {
+                _userManager = userManager;
+                _signInManager = signInManager;
+                _roleManager = roleManager;
+                _sendEmail = sendEmail;
+            }
+
+            public IActionResult Index()
+            {
+                return View();
+            }
+
+            [HttpGet]
+            public IActionResult Login(string? returnUrl = null)
+            {
+                LoginViewModel loginViewModel = new LoginViewModel();
+                loginViewModel.ReturnUrl = returnUrl ?? Url.Content("~/");
+                return View(loginViewModel);
+            }
+
+            [HttpGet]
+            public IActionResult ForgotPassword()
+            {
+                return View();
+            }
+
+            [HttpPost]
+            public async Task&lt;IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await _userManager.FindByEmailAsync(forgotPasswordViewModel.Email);
+                    if (user == null)
+                    {
+                        return RedirectToAction("ForgotPasswordConfirmation");
+                    }
+
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
+                        HttpContext.Request.Scheme);
+
+                    await _sendEmail.SendEmailAsync(forgotPasswordViewModel.Email, "Reset password confirmation",
+                        "Please reset the password using this link :- &lt;a href=\"" + callbackUrl +
+                        "\">link&lt;/a>");
+
+                    return RedirectToAction("ForgotPasswordConfirmation");
+                }
+                return View(forgotPasswordViewModel);
+            }
+
+            [HttpGet]
+            public IActionResult ForgotPasswordConfirmation()
+            {
+                return View();
+            }
+
+            [HttpGet]
+            public IActionResult ResetPassword(string code = null)
+            {
+                return code == null ? View("Error") : View();
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task&lt;IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = await _userManager.FindByEmailAsync(resetPasswordViewModel.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("Email", "User not found.");
+                        return View();
+                    }
+
+                    var result = await _userManager.ResetPasswordAsync(user, resetPasswordViewModel.Code,
+                        resetPasswordViewModel.Password);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ResetPasswordConfirmation");
+                    }
+                }
+
+                return View(resetPasswordViewModel);
+            }
+
+            [HttpGet]
+            public IActionResult ResetPasswordConfirmation()
+            {
+                return View();
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task&lt;IActionResult> Login(LoginViewModel loginViewModel, string? returnUrl = null)
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(loginViewModel.UserName,
+                        loginViewModel.Password, loginViewModel.RememberMe, true);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    if (result.IsLockedOut)
+                    {
+                        return View("Lockout");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(loginViewModel);
+                    }
+                }
+                return View(loginViewModel);
+            }
+
+            [HttpGet]
+            public async Task&lt;IActionResult> Register(string? returnUrl = null)
+            {
+                if (!await _roleManager.RoleExistsAsync("Pokemon"))
+                    await _roleManager.CreateAsync(new IdentityRole("Pokemon"));
+
+                if (!await _roleManager.RoleExistsAsync("Trainer"))
+                    await _roleManager.CreateAsync(new IdentityRole("Trainer"));
+
+                RegisterViewModel registerViewModel = new RegisterViewModel();
+                registerViewModel.ReturnUrl = returnUrl;
+                registerViewModel.RoleList = new List&lt;SelectListItem>
+                {
+                    new SelectListItem()
+                    {
+                        Text = "Pokemon",
+                        Value = "Pokemon"
+                    },
+                    new SelectListItem()
+                    {
+                        Text = "Trainer",
+                        Value = "Trainer"
+                    }
+                };
+
+                return View(registerViewModel);
+            }
+
+            [HttpPost]
+            public async Task&lt;IActionResult> Register(RegisterViewModel registerViewModel, string? returnUrl = null)
+            {
+                registerViewModel.ReturnUrl = returnUrl;
+                returnUrl = returnUrl ?? Url.Content("~/");
+
+                if (ModelState.IsValid)
+                {
+                    var user = new AppUser { Email = registerViewModel.Email, UserName = registerViewModel.UserName };
+                    var result = await _userManager.CreateAsync(user, registerViewModel.Password);
+                    if (result.Succeeded)
+                    {
+                        if (registerViewModel.RoleSelected != null && registerViewModel.RoleSelected.Length > 0
+                            && registerViewModel.RoleSelected == "Trainer")
+                        {
+                            await _userManager.AddToRoleAsync(user, "Trainer");
+                        }
+                        else
+                        {
+                            await _userManager.AddToRoleAsync(user, "Pokemon");
+                        }
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
+
+                    ModelState.AddModelError("Email", "User could not be created. Password not quite unique.");
+
+                }
+
+                return View(registerViewModel);
+            }
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task&lt;IActionResult> Logout()
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Index", "Home");
+            }
+        }
+    }
+</code>
+      </pre>
+
+      <p><strong>Program.cs</strong></p>
+      <pre>
+<code>
+    using IdentityDemo.Data;
+    using IdentityDemo.Helpers;
+    using IdentityDemo.Interfaces;
+    using IdentityDemo.Services;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    
+    namespace IdentityDemo
+    {
+        public class Program
+        {
+            public static void Main(string[] args)
+            {
+                var builder = WebApplication.CreateBuilder(args);
+    
+                // Add services to the container.
+                builder.Services.AddControllersWithViews();
+                builder.Services.AddTransient&lt;ISendEmail, SendEmail>();
+                builder.Services.Configure&lt;AuthMessageSenderOptions>(builder.Configuration.GetSection("Outlook"));
+                builder.Services.AddDbContext&lt;ApplicationDbContext>(options =>
+                {
+                    var connectionString = builder.Configuration.GetConnectionString("Default");
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                });
+    
+                builder.Services.AddIdentity&lt;IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores&lt;ApplicationDbContext>();
+                builder.Services.Configure&lt;IdentityOptions>(opt =>
+                {
+                    opt.Password.RequiredLength = 5;
+                    opt.Password.RequireLowercase = true;
+                    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);
+                    opt.Lockout.MaxFailedAccessAttempts = 5;
+                    //opt.SignIn.RequireConfirmedAccount = true;
+                });
+    
+                builder.Services
+                    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie();
+    
+                builder.Services.ConfigureApplicationCookie(options =>
+                {
+                    options.AccessDeniedPath = "/Account/AccessDenied";
+                    options.Cookie.Name = "YourAppCookieName";
+                    options.Cookie.HttpOnly = true;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                    options.LoginPath = "/Account/Login";
+                    // ReturnUrlParameter requires 
+                    //using Microsoft.AspNetCore.Authentication.Cookies;
+                    options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                    options.SlidingExpiration = true;
+                });
+                builder.Services.ConfigureExternalCookie(options =>
+                {
+                    options.Cookie.Name = "_ASPSharedExternalCookie";
+                });
+    
+                var app = builder.Build();
+    
+                // Configure the HTTP request pipeline.
+                if (!app.Environment.IsDevelopment())
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseHsts();
+                }
+    
+                app.UseHttpsRedirection();
+                app.UseStaticFiles();
+    
+                app.UseRouting();
+                app.UseAuthentication();
+                app.UseAuthorization();
+    
+                app.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+    
+                app.Run();
+            }
+        }
+    }
+</code>
+      </pre>
+
+      <h2>Section 6 :- Jwt Token in asp.net core</h2>
+      <p>
+        In Core ASP.NET, JSON Web Tokens (JWT) serve as a popular mechanism for
+        secure and compact representation of information between parties. A JWT
+        is essentially a self-contained token that contains claims, such as user
+        identity and authorization details, encoded in a JSON format. In Core
+        ASP.NET, JWTs are widely utilized for authentication purposes, allowing
+        users to securely access resources without the need for continuous
+        authentication checks. The token consists of three parts: a header
+        specifying the type and signing algorithm, a payload containing the
+        claims, and a signature ensuring data integrity. ASP.NET Core
+        facilitates the creation and validation of JWTs through its
+        authentication middleware, providing developers with a seamless and
+        efficient approach to implement secure user authentication and
+        authorization in their applications.
+      </p>
+
+      <a
+        href="https://github.com/RKITSoftware/Deep-Patel/tree/main/API/ASP.Net%20Core/JWTTokenDemo/JWTTokenDemo"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Jwt Token Demo</a
+      >
+    </section>
+  </body>
+</html>
