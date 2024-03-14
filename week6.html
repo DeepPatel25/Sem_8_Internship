@@ -9,6 +9,7 @@
 
   <body>
     <section>
+      <h1>Week 6</h1>
       <h2>
         Section 1 :- Custom JWT Token using System Class and Microsoft's Class
       </h2>
@@ -40,13 +41,13 @@
         scenarios, bolstering application security and user trust.
       </p>
 
-      <p>JWT Token Demo</p>
+      <p><strong>JWT Token Demo</strong></p>
       <a
         href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Part%206%20-%20Web%20Development/CustomJWTBearerTokenAPI/CustomJWTBearerTokenAPI/Business%20Logic/BLToken.cs"
         target="_blank"
         rel="noopener noreferrer"
       >
-        <p>BLToken.cs</p>
+        <p><strong>BLToken.cs</strong></p>
       </a>
 
       <a
@@ -57,13 +58,13 @@
       >
 
       <h2>Section 2 :- Adding new functionalities & updation in Final Demo</h2>
-      <p>1. Interface</p>
+      <p><strong>1. Interface</strong></p>
 
       <a
         target="_blank"
         href="https://github.com/RKITSoftware/Deep-Patel/blob/main/API/Advanced%20C%23%20Topics/C%23%20Advance/OnlineShoppingAPI/OnlineShoppingAPI/Interface/IBasicAPIService.cs"
       >
-        <p>IBasicAPIService.cs</p>
+        <p><strong>IBasicAPIService.cs</strong></p>
       </a>
 
       <a
@@ -71,7 +72,7 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <p>CLCustomerController.cs</p>
+        <p><strong>CLCustomerController.cs</strong></p>
       </a>
 
       <p>2. Exception Logging</p>
@@ -176,7 +177,7 @@
         /// &lt;summary>
         /// Verifies the provided OTP (One-Time Password) and initiates the purchase of items 
         /// in the customer's cart.
-        /// </summary>
+        /// &lt;/summary>
         /// &lt;param name="customerId">The unique identifier of the customer.&lt;/param>
         /// &lt;param name="otp">The OTP entered by the customer for verification.&lt;/param>
         /// &lt;returns>
@@ -188,7 +189,7 @@
             try
             {
                 // Check if the provided customerId is invalid (negative or zero).
-                if (customerId <= 0)
+                if (customerId &lt;= 0)
                 {
                     return BLHelper.ResponseMessage(HttpStatusCode.PreconditionFailed,
                         "Id can't be negative nor zero.");

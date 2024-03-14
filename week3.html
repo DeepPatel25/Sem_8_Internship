@@ -1,44 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Week 3</title>
     <link rel="stylesheet" href="style.css" />
-</head>
+  </head>
 
-<body>
+  <body>
     <section>
-        <h2>Section 1 :- Lambda Expression</h2>
-        <p>In C#, a lambda expression is a concise way to create anonymous functions. It allows you to define inline,
-            short, and often one-time-use functions without explicitly declaring a separate method. The syntax for a
-            lambda expression is (parameters) => expression, where parameters are the input parameters and the
-            expression is the operation to be performed.</p>
+      <h1>Week 3</h1>
+      <h2>Section 1 :- Lambda Expression</h2>
+      <p>
+        In C#, a lambda expression is a concise way to create anonymous
+        functions. It allows you to define inline, short, and often one-time-use
+        functions without explicitly declaring a separate method. The syntax for
+        a lambda expression is (parameters) => expression, where parameters are
+        the input parameters and the expression is the operation to be
+        performed.
+      </p>
 
-        <p>Example</p>
-        <pre>
+      <p>Example</p>
+      <pre>
 <code>
-    Func<int, int, int> add = (a, b) => a + b;
+    Func&lt;int, int, int> add = (a, b) => a + b;
     int result = add(3, 5); // result is 8
 </code>
         </pre>
 
-        <p>In this example, the lambda expression (a, b) => a + b defines an anonymous function that takes two integers
-            and returns their sum. The Func&lt;int, int, int> delegate is used to store and execute the lambda
-            expression.
+      <p>
+        In this example, the lambda expression (a, b) => a + b defines an
+        anonymous function that takes two integers and returns their sum. The
+        Func&lt;int, int, int> delegate is used to store and execute the lambda
+        expression. Lambda expressions are commonly used in LINQ queries, event
+        handling, and functional programming paradigms, providing a more concise
+        and expressive way to write code with less boilerplate.
+      </p>
 
-            Lambda expressions are commonly used in LINQ queries, event handling, and functional programming
-            paradigms, providing a more concise and expressive way to write code with less boilerplate.</p>
+      <h2>Section 2 :- Extension Method</h2>
+      <p>
+        In C#, an extension method allows you to add new methods to existing
+        types without modifying them, enhancing the capabilities of those types.
+        Extension methods are static methods within static classes and are
+        invoked as if they were instance methods of the extended type. The
+        defining class must be in scope through a using directive.
+      </p>
 
-        <h2>Section 2 :- Extension Method</h2>
-        <p>
-            In C#, an extension method allows you to add new methods to existing types without modifying them, enhancing
-            the capabilities of those types. Extension methods are static methods within static classes and are invoked
-            as if they were instance methods of the extended type. The defining class must be in scope through a using
-            directive.</p>
-
-        <pre>
+      <pre>
 <code>
     namespace ExtensionMEthodDemo
     {
@@ -57,7 +65,7 @@
             /// Extension method of DemoCheck
             /// &lt;/summary>
             /// &lt;param name="ext">Binding Parameter for DemoCheck&lt;/param>
-            /// <param name="str">string for written on console</param>
+            /// &lt;param name="str">string for written on console&lt;/param>
             public static void M5(this DemoCheck ext, string str)
             {
                 Console.WriteLine(str);
@@ -78,18 +86,21 @@
 </code>
         </pre>
 
-        <h2>Section 3 :- Linq in DataTable and List</h2>
-        <p>
-            LINQ (Language Integrated Query) in C# can be used with both DataTable and List. With DataTable, LINQ
-            enables querying and manipulating tabular data, treating rows as objects. In the case of List, LINQ provides
-            a powerful syntax to query and transform collections of objects. Both scenarios leverage LINQ operators like
-            Where, Select, and OrderBy to filter, project, and sort data, offering a concise and expressive way to work
-            with data in memory. Whether working with tabular data in a DataTable or a collection of objects in a List,
-            LINQ facilitates efficient and readable data manipulation operations.
-        </p>
+      <h2>Section 3 :- Linq in DataTable and List</h2>
+      <p>
+        LINQ (Language Integrated Query) in C# can be used with both DataTable
+        and List. With DataTable, LINQ enables querying and manipulating tabular
+        data, treating rows as objects. In the case of List, LINQ provides a
+        powerful syntax to query and transform collections of objects. Both
+        scenarios leverage LINQ operators like Where, Select, and OrderBy to
+        filter, project, and sort data, offering a concise and expressive way to
+        work with data in memory. Whether working with tabular data in a
+        DataTable or a collection of objects in a List, LINQ facilitates
+        efficient and readable data manipulation operations.
+      </p>
 
-        <p>Example of Linq in DataTable</p>
-        <pre>
+      <p>Example of Linq in DataTable</p>
+      <pre>
 <code>
     using System.Data;
 
@@ -161,8 +172,8 @@
 </code>
         </pre>
 
-        <p>Example of Linq in List</p>
-        <pre>
+      <p>Example of Linq in List</p>
+      <pre>
 <code>
 namespace LinqListDemo
 {
@@ -220,27 +231,35 @@ namespace LinqListDemo
 </code>
         </pre>
 
-        <h2>Section 4 :- ORM (Object Relational Mapping) Tool</h2>
-        <p>An ORM (Object-Relational Mapping) tool in C# is a framework that simplifies the interaction between a
-            relational database and an object-oriented application by mapping database tables to objects and vice versa.
-            It abstracts the underlying SQL database operations, allowing developers to work with objects in their code,
-            rather than directly dealing with SQL queries.
-        </p>
-        <p>
-            ORM tools, such as Entity Framework and NHibernate in C#, provide a higher-level, more intuitive way to
-            perform database operations. They offer features like automatic generation of SQL queries, change tracking,
-            and caching, making it easier to develop, maintain, and scale applications. Developers can define the
-            database schema using code-first or database-first approaches, and the ORM tool handles the translation
-            between the object-oriented model and the relational database schema.
-        </p>
-        <p>
-            ORM tools also help reduce repetitive boilerplate code, enhance code readability, and improve productivity
-            by allowing developers to focus on the application's logic rather than low-level database interactions.
-            Overall, ORM tools play a crucial role in bridging the gap between the object-oriented world of application
-            code and the relational world of databases in C# development.</p>
+      <h2>Section 4 :- ORM (Object Relational Mapping) Tool</h2>
+      <p>
+        An ORM (Object-Relational Mapping) tool in C# is a framework that
+        simplifies the interaction between a relational database and an
+        object-oriented application by mapping database tables to objects and
+        vice versa. It abstracts the underlying SQL database operations,
+        allowing developers to work with objects in their code, rather than
+        directly dealing with SQL queries.
+      </p>
+      <p>
+        ORM tools, such as Entity Framework and NHibernate in C#, provide a
+        higher-level, more intuitive way to perform database operations. They
+        offer features like automatic generation of SQL queries, change
+        tracking, and caching, making it easier to develop, maintain, and scale
+        applications. Developers can define the database schema using code-first
+        or database-first approaches, and the ORM tool handles the translation
+        between the object-oriented model and the relational database schema.
+      </p>
+      <p>
+        ORM tools also help reduce repetitive boilerplate code, enhance code
+        readability, and improve productivity by allowing developers to focus on
+        the application's logic rather than low-level database interactions.
+        Overall, ORM tools play a crucial role in bridging the gap between the
+        object-oriented world of application code and the relational world of
+        databases in C# development.
+      </p>
 
-        <p>global.asax.cs File</p>
-        <pre>
+      <p>global.asax.cs File</p>
+      <pre>
 <code>
     using ServiceStack.OrmLite;
     using System.Configuration;
@@ -266,8 +285,8 @@ namespace LinqListDemo
 </code>
         </pre>
 
-        <p>CLCustomerController.cs</p>
-        <pre>
+      <p>CLCustomerController.cs</p>
+      <pre>
 <code>
     using ORMToolDemo.Models;
     using ServiceStack.Data;
@@ -366,75 +385,87 @@ namespace LinqListDemo
 </code>
         </pre>
 
-        <h2>Section 5 :- Security & Cryptography</h2>
-        <p>Security, in the context of computing and information systems, refers to the protection of data, systems, and
-            networks from unauthorized access, attacks, damage, or any form of disruption. It encompasses various
-            measures and practices designed to ensure the confidentiality, integrity, and availability of information.
-        </p>
-        <p>
-            Key aspects of security include:
-        </p>
-        <p>
-            1.Confidentiality: Ensuring that information is accessible only to authorized individuals or systems.
-        </p>
-        <p>
-            2. Integrity: Maintaining the accuracy and reliability of data by preventing unauthorized modifications.
-        </p>
-        <p>
-            3. Availability: Ensuring that systems and data are accessible and usable when needed.
-        </p>
-        <p>
-            4. Authentication: Verifying the identity of users or systems to grant appropriate access privileges.
-        </p>
-        <p>
-            5. Authorization: Granting or restricting access based on verified identities and defined permissions.
-        </p>
-        <p>
-            6. Auditability: Keeping track of system activities to detect and respond to security incidents.
-        </p>
-        <p>
-            Security measures involve a combination of hardware, software, policies, and procedures to create a robust
-            defense against potential threats.
-        </p>
-        <br>
-        <p>
-            Cryptography:
-            Cryptography is a field of study and practice that involves secure communication through the use of
-            mathematical techniques and algorithms to encode and decode information. It plays a crucial role in
-            achieving confidentiality and integrity in data transmission and storage.
-        </p>
-        <p>
-            Key concepts in cryptography include:
-        </p>
-        <p>
-            1. Encryption: The process of converting plaintext into ciphertext using an algorithm and a cryptographic
-            key.
-        </p>
-        <p>
-            2. Decryption: The reverse process of converting ciphertext back to plaintext using the appropriate key.
-        </p>
-        <p>
-            3. Symmetric Cryptography: Uses a single key for both encryption and decryption.
-        </p>
-        <p>
-            4. Asymmetric Cryptography (Public-Key Cryptography): Utilizes a pair of public and private keys for
-            encryption and decryption.
-        </p>
-        <p>
-            5. Hashing: A one-way function that generates a fixed-size string of characters (hash value) from input
-            data, commonly used for data integrity verification.
-        </p>
-        <p>
-            6. Digital Signatures: Verifiable digital equivalents of handwritten signatures, providing authentication
-            and ensuring the integrity of digital messages.
-        </p>
-        <p>
-            Cryptography is an essential component of many security protocols and systems, ensuring the protection of
-            sensitive information in various applications, including online communication, e-commerce, and secure data
-            storage.</p>
+      <h2>Section 5 :- Security & Cryptography</h2>
+      <p>
+        Security, in the context of computing and information systems, refers to
+        the protection of data, systems, and networks from unauthorized access,
+        attacks, damage, or any form of disruption. It encompasses various
+        measures and practices designed to ensure the confidentiality,
+        integrity, and availability of information.
+      </p>
+      <p>Key aspects of security include:</p>
+      <p>
+        1.Confidentiality: Ensuring that information is accessible only to
+        authorized individuals or systems.
+      </p>
+      <p>
+        2. Integrity: Maintaining the accuracy and reliability of data by
+        preventing unauthorized modifications.
+      </p>
+      <p>
+        3. Availability: Ensuring that systems and data are accessible and
+        usable when needed.
+      </p>
+      <p>
+        4. Authentication: Verifying the identity of users or systems to grant
+        appropriate access privileges.
+      </p>
+      <p>
+        5. Authorization: Granting or restricting access based on verified
+        identities and defined permissions.
+      </p>
+      <p>
+        6. Auditability: Keeping track of system activities to detect and
+        respond to security incidents.
+      </p>
+      <p>
+        Security measures involve a combination of hardware, software, policies,
+        and procedures to create a robust defense against potential threats.
+      </p>
+      <br />
+      <p>
+        Cryptography: Cryptography is a field of study and practice that
+        involves secure communication through the use of mathematical techniques
+        and algorithms to encode and decode information. It plays a crucial role
+        in achieving confidentiality and integrity in data transmission and
+        storage.
+      </p>
+      <p>Key concepts in cryptography include:</p>
+      <p>
+        1. Encryption: The process of converting plaintext into ciphertext using
+        an algorithm and a cryptographic key.
+      </p>
+      <p>
+        2. Decryption: The reverse process of converting ciphertext back to
+        plaintext using the appropriate key.
+      </p>
+      <p>
+        3. Symmetric Cryptography: Uses a single key for both encryption and
+        decryption.
+      </p>
+      <p>
+        4. Asymmetric Cryptography (Public-Key Cryptography): Utilizes a pair of
+        public and private keys for encryption and decryption.
+      </p>
+      <p>
+        5. Hashing: A one-way function that generates a fixed-size string of
+        characters (hash value) from input data, commonly used for data
+        integrity verification.
+      </p>
+      <p>
+        6. Digital Signatures: Verifiable digital equivalents of handwritten
+        signatures, providing authentication and ensuring the integrity of
+        digital messages.
+      </p>
+      <p>
+        Cryptography is an essential component of many security protocols and
+        systems, ensuring the protection of sensitive information in various
+        applications, including online communication, e-commerce, and secure
+        data storage.
+      </p>
 
-        <p>Security algorithms example in c#</p>
-        <pre>
+      <p>Security algorithms example in c#</p>
+      <pre>
 <code>
     namespace AESCryptographyDemo
     {
@@ -585,18 +616,21 @@ namespace LinqListDemo
 </code>
         </pre>
 
-        <h2>Section 6 :- Final Demo Adding Modules</h2>
-        <p>1. Admin Controller</p>
-        <p>2. User Table</p>
-        <p>3. Record Controller</p>
-        <p>4. Authentication</p>
-        <p>5. Created a OrderDetailViewModel</p>
+      <h2>Section 6 :- Final Demo Adding Modules</h2>
+      <p>1. Admin Controller</p>
+      <p>2. User Table</p>
+      <p>3. Record Controller</p>
+      <p>4. Authentication</p>
+      <p>5. Created a OrderDetailViewModel</p>
 
-        <br>
-        <p>Modification <a
-                href="https://github.com/RKITSoftware/Deep-Patel/commit/7cef7911ef2695d7b315a8dac982441f45b5a25f">Link</a>
-        </p>
+      <br />
+      <p>
+        Modification
+        <a
+          href="https://github.com/RKITSoftware/Deep-Patel/commit/7cef7911ef2695d7b315a8dac982441f45b5a25f"
+          >Link</a
+        >
+      </p>
     </section>
-</body>
-
+  </body>
 </html>
